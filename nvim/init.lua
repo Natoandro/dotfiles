@@ -21,5 +21,8 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
+-- indentLine
+vim.g.indentLine_char = '▏'
+
 require('keymaps')
 require('plugins')

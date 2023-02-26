@@ -44,7 +44,8 @@ require('packer').startup(function(use)
   -- Editor
   use 'jiangmiao/auto-pairs'
   use 'terrortylor/nvim-comment'
-  use 'tpope/vim-surround'
+  use 'tpope/tvim-surround'
+  use 'Yggdroot/indentLine'
 
 end)
 

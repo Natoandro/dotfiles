@@ -2,6 +2,10 @@
 require('nvim-tree').setup({
   view = {
     adaptive_size = true,
+    number = true,
+    relativenumber = true,
+    centralize_selection = true,
+    width = 40,
   }
 })
 
