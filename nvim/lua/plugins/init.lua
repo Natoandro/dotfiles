@@ -1,9 +1,10 @@
 vim.cmd [[packadd packer.nvim]]
 
 require('packer').startup(function(use)
-  
+  -- Plugin manager
   use 'wbthomason/packer.nvim'
 
+  -- VCS
   use {
     'tanvirtin/vgit.nvim',
     requires = {
@@ -11,6 +12,7 @@ require('packer').startup(function(use)
     }
   }
 
+  -- Explorer
   use {
     'nvim-tree/nvim-tree.lua',
     requires = {
@@ -20,53 +22,37 @@ require('packer').startup(function(use)
   }
 
   use {
+    'nvim-telescope/telescope.nvim', tag = '0.1.1',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+  }
+
+  -- View
+  use {
     'nvim-lualine/lualine.nvim',
   }
 
-  use 'folke/tokyonight.nvim'
 
+  -- Themes
+  use 'folke/tokyonight.nvim'
+  use 'navarasu/onedark.nvim'
+
+  -- LSPs
   use 'neovim/nvim-lspconfig'
 
+  -- Editor
   use 'jiangmiao/auto-pairs'
-
   use 'terrortylor/nvim-comment'
+  use 'tpope/vim-surround'
 
 end)
 
-
-require('vgit').setup()
-
-require('nvim-tree').setup({
-  view = {
-    adaptive_size = true,
-  }
-})
-
-require('lualine').setup({
-  tabline = {
-    lualine_b = {'buffers'},
-    lualine_z = {'tabs'},
-  },
-})
-
-require('tokyonight').setup({
-  style = 'moon',
-  transparent = true,
-  styles = {
-    -- sidebars = 'transparent',
-  },
-  dim_inactive = true,
-})
-
-vim.cmd[[colorscheme tokyonight]]
-
-
-require('nvim_comment').setup({
-  comment_empty = true,
-})
-
-
+require('plugins.vcs')
+require('plugins.view')
+require('plugins.files')
+require('plugins.themes')
+require('plugins.editor')
 require('plugins.lsp')
-
 
 

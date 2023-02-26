@@ -4,6 +4,7 @@
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
+vim.opt.cursorline = true
 
 vim.opt.wrap = true
 vim.opt.tabstop = 2
