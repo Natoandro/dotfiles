@@ -6,6 +6,7 @@ vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
 vim.opt.cursorline = true
 vim.opt.colorcolumn = "80,100"
+vim.opt.scrolloff = 5
 
 vim.opt.wrap = true
 vim.opt.tabstop = 2

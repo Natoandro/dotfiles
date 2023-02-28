@@ -38,13 +38,17 @@ require('packer').startup(function(use)
   use 'folke/tokyonight.nvim'
   use 'navarasu/onedark.nvim'
 
-  -- LSPs
+  -- Languages
   use 'neovim/nvim-lspconfig'
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+  }
 
   -- Editor
   use 'jiangmiao/auto-pairs'
   use 'terrortylor/nvim-comment'
-  use 'tpope/tvim-surround'
+  use 'tpope/vim-surround'
   use 'Yggdroot/indentLine'
 
 end)
