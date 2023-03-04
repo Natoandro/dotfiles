@@ -13,6 +13,10 @@ vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
+vim.opt.foldmethod = "syntax"
+vim.opt.foldnestmax = 10
+vim.opt.foldlevel = 2
+
 -- vgit
 vim.o.updatetime = 300
 vim.o.incsearch = false
