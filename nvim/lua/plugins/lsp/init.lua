@@ -60,4 +60,9 @@ require'lspconfig'.rust_analyzer.setup{
 require'lspconfig'.denols.setup{
   on_attach = on_attach,
   flags = lsp_flags,
+  init_options = {
+    enable = true,
+    unstable = true,
+  }
 }
+
