@@ -1,57 +1,66 @@
-vim.cmd [[packadd packer.nvim]]
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-require('packer').startup(function(use)
-  -- Plugin manager
-  use 'wbthomason/packer.nvim'
 
+require('lazy').setup({
   -- VCS
-  use {
+  {
     'tanvirtin/vgit.nvim',
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim'
     }
-  }
+  },
 
   -- Explorer
-  use {
+  {
     'nvim-tree/nvim-tree.lua',
-    requires = {
+    dependencies = {
       'nvim-tree/nvim-web-devicons',
     },
     tag = 'nightly'
-  }
+  },
 
-  use {
+  {
     'nvim-telescope/telescope.nvim', tag = '0.1.1',
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim'
     },
-  }
+  },
 
   -- View
-  use {
+  {
     'nvim-lualine/lualine.nvim',
-  }
+  },
 
 
   -- Themes
-  use 'folke/tokyonight.nvim'
-  use 'navarasu/onedark.nvim'
+  'folke/tokyonight.nvim',
+  'navarasu/onedark.nvim',
 
   -- Languages
-  use 'neovim/nvim-lspconfig'
-  use {
+  'neovim/nvim-lspconfig',
+  {
     'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-  }
+    build = ':TSUpdate',
+  },
 
   -- Editor
-  use 'jiangmiao/auto-pairs'
-  use 'terrortylor/nvim-comment'
-  use 'tpope/vim-surround'
-  use 'Yggdroot/indentLine'
+  'jiangmiao/auto-pairs',
+  'terrortylor/nvim-comment',
+  'tpope/vim-surround',
+  'Yggdroot/indentLine',
 
-end)
+})
 
 require('plugins.vcs')
 require('plugins.view')

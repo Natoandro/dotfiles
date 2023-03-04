@@ -26,5 +26,5 @@ vim.opt.termguicolors = true
 -- indentLine
 vim.g.indentLine_char = '▏'
 
-require('keymaps')
 require('plugins')
+require('keymaps')
