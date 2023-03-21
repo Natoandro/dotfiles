@@ -15,7 +15,13 @@ vim.opt.expandtab = true
 
 vim.opt.foldmethod = "syntax"
 vim.opt.foldnestmax = 10
-vim.opt.foldlevel = 2
+vim.opt.foldlevel = 5
+
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd(
+ { "BufEnter", "CursorHold", "CursorHoldi", "FocusGained" },
+ { command = "if mode() != 'c' | checktime | endif", pattern = { "*" } }
+)
 
 -- vgit
 vim.o.updatetime = 300
