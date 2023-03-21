@@ -15,3 +15,8 @@ require('telescope').setup{
   }
 }
 
+require('trouble').setup {
+
+}
+
+
