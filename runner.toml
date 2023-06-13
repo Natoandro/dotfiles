@@ -1,0 +1,43 @@
+[power]
+_title = "Power options"
+
+[power.poweroff]
+_title = "Power off"
+_cmd = "systemctl poweroff"
+
+[power.reboot]
+_title = "Reboot"
+_cmd = "systemctl reboot"
+
+[power.suspend]
+_title = "Suspend"
+_cmd = "systemctl suspend"
+
+[power.hibernate]
+_title = "Hibernate"
+_cmd = "systemctl hibernate"
+
+[power.lock]
+_title = "Lock screen"
+_cmd = "slock"
+
+[power.advanced]
+_title = "More..."
+
+[power.advanced.halt]
+_title = "Halt"
+_cmd = "systemctl halt"
+
+[power.advanced.hybrid-sleep]
+_title = "Hibernate and suspend"
+_cmd = "systemctl hybrid-sleep"
+
+[power.advanced.rescue]
+_title = "Rescue mode"
+_cmd = "systemctl rescue"
+
+[power.advanced.emergency]
+_title = "Emergency mode"
+_cmd = "systemctl emergency"
+
+

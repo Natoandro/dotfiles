@@ -9,13 +9,13 @@ vim.opt.colorcolumn = "80,100"
 vim.opt.scrolloff = 5
 
 vim.opt.wrap = true
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.opt.foldmethod = "syntax"
 vim.opt.foldnestmax = 10
-vim.opt.foldlevel = 5
+vim.opt.foldlevel = 10
 
 vim.opt.autoread = true
 vim.api.nvim_create_autocmd(
@@ -35,6 +35,7 @@ vim.opt.termguicolors = true
 
 -- indentLine
 vim.g.indentLine_char = '▏'
+vim.g.indentLine_setConceal = 0
 
 require('plugins')
 require('keymaps')

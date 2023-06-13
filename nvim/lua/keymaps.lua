@@ -34,6 +34,9 @@ vim.keymap.set('n', '<leader>gc', builtin.git_commits)
 vim.keymap.set('n', '<leader>gC', builtin.git_bcommits)
 vim.keymap.set('n', '<leader>gb', builtin.git_branches)
 vim.keymap.set('n', '<leader>gs', builtin.git_status)
+vim.keymap.set('n', '<leader>st', builtin.colorscheme)
+vim.keymap.set('n', '<leader>fq', builtin.quickfix)
+vim.keymap.set('n', '<leader>fj', builtin.jumplist)
 
 -- NvimComment
 map('n', '<leader>/', ':CommentToggle<CR>')
@@ -50,6 +53,13 @@ map('n', '<leader>7', ':LualineBuffersJump! 7<CR>')
 map('n', '<leader>8', ':LualineBuffersJump! 8<CR>')
 map('n', '<leader>9', ':LualineBuffersJump! 9<CR>')
 
-map('n', 'gp', ':bprev<CR>')
-map('n', 'gn', ':bnext<CR>')
+map('n', 'gh', ':bprev<CR>')
+map('n', 'gl', ':bnext<CR>')
+
+local harpoon_ui = require("harpoon.ui")
+local harpoon_mark = require("harpoon.mark")
+vim.keymap.set('n', '<leader>hh', harpoon_ui.toggle_quick_menu)
+vim.keymap.set('n', '<leader>hm', harpoon_mark.add_file)
+vim.keymap.set('n', 'gp', harpoon_ui.nav_prev)
+vim.keymap.set('n', 'gn', harpoon_ui.nav_next)
 

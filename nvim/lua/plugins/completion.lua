@@ -2,12 +2,12 @@ local cmp = require('cmp')
 
 cmp.setup({
   snippet = {
-    exapnd = function(args)
+    expand = function(args)
       vim.fn["vsnip#anonymous"](args.body)
     end,
   },
   window = {
-    
+
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -19,8 +19,16 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
+    { name = "crates" },
   }, {
     { name = 'buffer' },
   })
 })
 
+
+require('crates').setup {
+  null_ls = {
+    enabled = true,
+    name = 'crates.nvim',
+  }
+}

@@ -13,6 +13,26 @@ vim.opt.rtp:prepend(lazypath)
 
 
 require('lazy').setup({
+  {
+    'williamboman/mason.nvim',
+    build = ":MasonUpdate",
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'neovim/nvim-lspconfig',
+    },
+  },
+  {
+    'jay-babu/mason-null-ls.nvim',
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "jose-elias-alvarez/null-ls.nvim",
+    }
+  },
+
   -- VCS
   {
     'tanvirtin/vgit.nvim',
@@ -31,10 +51,15 @@ require('lazy').setup({
   },
 
   {
-    'nvim-telescope/telescope.nvim', tag = '0.1.1',
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.1',
     dependencies = {
       'nvim-lua/plenary.nvim'
     },
+  },
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'make'
   },
 
   {
@@ -43,6 +68,8 @@ require('lazy').setup({
       'nvim-tree/nvim-web-devicons',
     }
   },
+
+  'ThePrimeagen/harpoon',
 
   -- View
   {
@@ -53,6 +80,9 @@ require('lazy').setup({
   -- Themes
   'folke/tokyonight.nvim',
   'navarasu/onedark.nvim',
+  { 'catppuccin/nvim',          name = "catppuccin" },
+  { 'ellisonleao/gruvbox.nvim', priority = 1000 },
+  'rebelot/kanagawa.nvim',
 
   -- Languages
   'neovim/nvim-lspconfig',
@@ -60,6 +90,18 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
   },
+  'lukas-reineke/lsp-format.nvim',
+  'nvim-treesitter/nvim-treesitter',
+  'nvim-treesitter/nvim-treesitter-context',
+
+  {
+    'jose-elias-alvarez/null-ls.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    }
+  },
+
+  'udalov/kotlin-vim',
 
   -- Completion
   'hrsh7th/cmp-nvim-lsp',
@@ -71,13 +113,21 @@ require('lazy').setup({
   'hrsh7th/cmp-vsnip',
   'hrsh7th/vim-vsnip',
 
+  {
+    'saecki/crates.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+  },
+
   -- Editor
   'jiangmiao/auto-pairs',
   'terrortylor/nvim-comment',
   'tpope/vim-surround',
   'Yggdroot/indentLine',
+  'alvan/vim-closetag',
 
 })
+
+require('mason').setup()
 
 require('plugins.vcs')
 require('plugins.view')
@@ -86,5 +136,3 @@ require('plugins.themes')
 require('plugins.editor')
 require('plugins.lsp')
 require('plugins.completion')
-
-

@@ -25,106 +25,54 @@
 # SOFTWARE.
 
 from libqtile import bar, layout, widget, hook, qtile
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, DropDown, Group, Key, Match, ScratchPad, Screen
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
-from libqtile.log_utils import logger
+
+# from libqtile.log_utils import logger
 import subprocess
 from spotify import Spotify
 from custom_widgets import WindowName
+import os
+from itertools import takewhile
 
-subprocess.Popen(["compton"])
-subprocess.Popen(["xscreensaver", "--no-spash"])
-# subprocess.Popen(["qbittorrent"])
-# subprocess.Popen(["slack"])
+from keys import keys, mod
+from commands import terminal
+import commands as cmd
 
-mod = "mod4"
-alt = "mod1"
+subprocess.Popen(["bash", os.path.expanduser("~/.config/qtile/startup.sh")])
 
-myPrimaryMenu = 'rofi -modi "drun,run" -show drun -show-icons'
-mySecondaryMenu = "dmenu_run -fn 'JetBrains Mono-10' -lr 1.5 -p 'Run:'"
-terminal = guess_terminal()
-myFileManager = f"{terminal} -e vifm"
-myFileBrowser = "rofi -show filebrowser"
-myWindowSwitcher = 'rofi -modi "window,windowcd" -show window -show-icons'
-myWindowSwitcherInGroup = 'rofi -modi "window,windowcd" -show windowcd -show-icons'
 
-keys = [
-    # A list of available commands that can be bound to keys can be found
-    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Switch between windows
-    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "Tab", lazy.layout.next(), desc="Move window focus to other window"),
-    # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-    # Grow windows. If current window is on the edge of screen and direction
-    # will be to screen edge - window would shrink.
-    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
-    Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
-    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key(
-        [mod, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    # Toggle between different layouts as defined below
-    Key([mod], "F1", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
-    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control", "shift"], "r", lazy.restart(), desc="Restart Qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    # Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+# def send_current_window(qtile):
+#     win_info = qtile.current_window.info()
+#     name = win_info["name"]
+#     status = (
+#         "minimized" if win_info["minimized"]
+#         else "maximized" if win_info["maximized"]
+#         else "floating" if win_info["floating"]
+#         else "tiled"
+#     )
+#     cur_group = qtile.current_group
+#     group = f"Group: {cur_group.name}"
+#     screen_info = qtile.current_screen.cmd_info()
+#     screen = f"Screen {screen_info['index'] + 1} ({screen_info['width']}x{screen_info['height']})"
+#     qtile.cmd_spawn(["dunstify", screen, f"{group}\nWindow: {name} (<u>{status}</u>)"])
+#
 
-    # Mine
-    Key([mod], "r", lazy.spawn(myPrimaryMenu), desc="My primary menu"),
-    Key([mod], "d", lazy.spawn(mySecondaryMenu), desc="DMenu"),
-    Key([mod], "e", lazy.spawn(myFileManager), desc="File Manager"),
-    Key([mod, "shift"], "e", lazy.spawn(myFileBrowser), desc="File Browser"),
-    Key([mod, "control"], "Tab", lazy.spawn(myWindowSwitcher), desc="Window switcher"),
-    Key([alt], "Tab", lazy.spawn(myWindowSwitcherInGroup), desc="Window swhitcher"),
+# keys = [
+#     # A list of available commands that can be bound to keys can be found
+#     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
+#     # Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+#
+#     # Mine
+#
+#     # Key([mod, "shift"], "t", lazy.function(send_current_window), desc="Dispaly current window title in a notification"),
+#
+#     # Key([mod, "shift"], "r", lazy.layout.reset()),
+#     # Key([mod, "alt"], "h", lazy.window.toscreen(-1)),
+#     # Key([mod, "shift"], "Right", lazy.window.toscreen(1)),
+#
+# ]
 
-    Key([mod], "bracketright", lazy.layout.grow()),
-    Key([mod], "bracketleft", lazy.layout.shrink()),
-    Key([mod], "n", lazy.layout.normalize()),
-    Key([mod], "o", lazy.layout.maximize()),
-    # Key([mod, "shift"], "r", lazy.layout.reset()),
-    Key([mod, "shift"], "space", lazy.layout.flip()),
-    Key([mod, "shift"], "Left", lambda qtile: qtile.current_window.toscreen((qtile.current_screen.index - 1) % qtile.num_screens())),
-    # Key([mod, "alt"], "h", lazy.window.toscreen(-1)),
-    Key([mod, "shift"], "Right", lazy.window.toscreen(1)),
-
-    Key([mod], "f", lazy.window.toggle_floating()),
-    Key([mod, "shift"], "m", lazy.window.toggle_maximize()),
-    Key([mod], "m", lazy.window.toggle_minimize()),
-    Key([mod, "shift"], "f", lazy.window.bring_to_front()),
-
-    # not working
-    Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout"),
-
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")),
-    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")),
-    Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc="Play/Pause player"),
-    Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc="Skip to next"),
-    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Skip to previous"),
-
-    Key([mod], "b", lazy.spawn("microsoft-edge")),
-]
 
 def to_prev_screen(qtile, move_window=True):
     num_screens = len(qtile.screens)
@@ -135,6 +83,7 @@ def to_prev_screen(qtile, move_window=True):
         qtile.current_window.togroup(group)
     qtile.cmd_to_screen(target)
 
+
 def to_next_screen(qtile, move_window=True):
     num_screens = len(qtile.screens)
     i = qtile.screens.index(qtile.current_screen)
@@ -144,18 +93,97 @@ def to_next_screen(qtile, move_window=True):
         qtile.current_window.togroup(group)
     qtile.cmd_to_screen(target)
 
-keys.extend([
-    Key([mod, "shift"], "p", lazy.function(to_prev_screen), desc="Move current window to previous screen"),
-    Key([mod, "shift"], "n", lazy.function(to_next_screen), desc="Move current window to next screen"),
-    Key([mod], "p", lazy.function(to_prev_screen, move_window=False), desc="Move current window to previous screen"),
-    Key([mod], "n", lazy.function(to_next_screen, move_window=False), desc="Move current window to next screen"),
-])
 
-group_names = ["web", "code", "term", "file", "social", "media", "work", "sys", "misc"]
+keys.extend(
+    [
+        Key(
+            [mod, "shift"],
+            "p",
+            lazy.function(to_prev_screen),
+            desc="Move current window to previous screen",
+        ),
+        Key(
+            [mod, "shift"],
+            "n",
+            lazy.function(to_next_screen),
+            desc="Move current window to next screen",
+        ),
+        Key(
+            [mod],
+            "p",
+            lazy.function(to_prev_screen, move_window=False),
+            desc="Move current window to previous screen",
+        ),
+        Key(
+            [mod],
+            "n",
+            lazy.function(to_next_screen, move_window=False),
+            desc="Move current window to next screen",
+        ),
+    ]
+)
+
+
+def group_switcher(qtile):
+    current_group = qtile.current_group
+    groups = takewhile(lambda g: "Group" in type(g).__name__, qtile.groups)
+    p = subprocess.run(
+        ["rofi", "-dmenu", "-format", "i", "-select", current_group.name],
+        stdout=subprocess.PIPE,
+        input="\n".join(
+            f"{idx + 1}: {group.name}" for (idx, group) in enumerate(groups)
+        ),
+        text=True,
+    )
+    if p.returncode == 0:
+        selected_group = qtile.groups[int(p.stdout)]
+        qtile.current_screen.cmd_toggle_group(selected_group.name)
+
+
+keys.extend(
+    [
+        Key(
+            [mod],
+            "grave",
+            lazy.function(group_switcher),
+            desc="Open rofi group switcher",
+        ),
+    ]
+)
+
+
+def toggle_bar(qtile):
+    qtile.cmd_hide_show_bar()
+
+
+keys.extend([Key([mod], "F8", lazy.function(toggle_bar), desc="Toggle bar visibility")])
+
+# icons        
+
+
+group_names = [
+    " term",
+    " code",
+    "💻computing",
+    " internet",
+    " file",
+    " social",
+    # "🎜 media",
+    "🎧music",
+    "🎥video",
+    " work",
+    "📅time",
+    "sys",
+    " misc",
+]
 group_matches = {}
 group_spawns = {"chat": "slack"}
 
-groups = [Group(name, spawn=group_spawns.get(name)) for name  in group_names]
+groups = [
+    Group(name, spawn=group_spawns.get(name), label=name[0:1]) for name in group_names
+]
+
+group_keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"]
 
 for i, g in enumerate(groups):
     keys.extend(
@@ -163,14 +191,14 @@ for i, g in enumerate(groups):
             # mod1 + letter of group = switch to group
             Key(
                 [mod],
-                f"{i+1}",
+                group_keys[i],
                 lazy.group[g.name].toscreen(),
                 desc="Switch to group {}".format(g.name),
             ),
             # mod1 + shift + letter of group = switch to & move focused window to group
             Key(
                 [mod, "shift"],
-                f"{i+1}",
+                group_keys[i],
                 lazy.window.togroup(g.name, switch_group=True),
                 desc="Switch to & move focused window to group {}".format(g.name),
             ),
@@ -181,10 +209,61 @@ for i, g in enumerate(groups):
         ]
     )
 
+keys.extend(
+    [
+        Key([mod], "F11", lazy.group["Spad"].dropdown_toggle("term")),
+    ]
+)
+
+spad_commons = dict(
+    opacity=1,
+    y=0.2,
+    height=0.6,
+    on_focus_lost_hide=True,
+    warp_pointer=True,
+)
+
+spad = ScratchPad(
+    "Spad",
+    [
+        DropDown(
+            "term",
+            terminal + " -T 'Scratchpad terminal' -e tmux new-session -A -s 'spad'",
+            **spad_commons,
+        ),
+        DropDown(
+            "top",
+            terminal + " -T 'Btop' -e btop",
+            **spad_commons,
+        ),
+    ],
+)
+
+groups.append(spad)
+keys.extend(
+    [
+        Key([mod], "F11", lazy.group["Spad"].dropdown_toggle("term")),
+        Key([mod], "F12", lazy.group["Spad"].dropdown_toggle("top")),
+    ]
+)
+
+
+@hook.subscribe.startup_complete
+def startup():
+    qtile.cmd_simulate_keypress([mod], "F12")
+    qtile.cmd_simulate_keypress([mod], "F12")
+
+
 layouts = [
     # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4, margin=4, gap=4),
     layout.Max(),
-    layout.MonadTall(margin=6, gap=6, border_normal="#110011", border_focus="#aa00aa"),
+    layout.MonadTall(
+        margin=6,
+        gap=6,
+        border_width=4,
+        border_normal="#110011",
+        border_focus="#aaaaaa",
+    ),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -205,7 +284,9 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 
-group_box_config=dict(highlight_method="block", inactive="ffffff60")
+group_box_config = dict(
+    highlight_method="line", inactive="ffffff60", font="JetBrains Mono", fontsize=14
+)
 window_name_config = dict(
     foreground="aa88ff",
     txt_floating="🗗 ",
@@ -213,21 +294,30 @@ window_name_config = dict(
         "Button1": lazy.window.bring_to_front(),
         "Button2": lazy.window.toggle_maximize(),
         "Button3": lazy.window.toggle_minimize(),
-    }
+    },
 )
 window_count_config = dict(
     foreground="888888",
     fmt="Windows: {}",
     mouse_callbacks={
-        "Button1": lazy.spawn(myWindowSwitcherInGroup),
+        "Button1": lazy.spawn(cmd.menu_switcherGroup),
         "Button3": lazy.layout.next(),  # TODO next window (include all windows in the cycle)
-    }
+    },
 )
-task_list_config = dict(highlight_method="block", txt_floating="🗗 ", txt_maximized="🗖 ", txt_minimized="🗕 ")
-current_screen_config = dict(active_text="•", inactive_text="•", fontsize=20, mouse_callbacks={"Button1": lazy.spawn(myPrimaryMenu)})
+task_list_config = dict(
+    highlight_method="block", txt_floating="🗗 ", txt_maximized="🗖 ", txt_minimized="🗕 "
+)
+current_screen_config = dict(
+    active_text="•",
+    inactive_text="•",
+    fontsize=20,
+    mouse_callbacks={"Button1": lazy.spawn(cmd.menu_primary)},
+)
+
 
 def sp(length=10):
     return widget.Spacer(length=length)
+
 
 screens = [
     Screen(
@@ -236,43 +326,11 @@ screens = [
                 sp(),
                 widget.CurrentScreen(**current_screen_config),
                 widget.GroupBox(**group_box_config),
-                # widget.Prompt(),
-                widget.WindowName(**window_name_config),
-                widget.WindowCount(**window_count_config),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                # widget.Spacer(),
-                # widget.TaskList(**task_list_config),
-                # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
-                # widget.StatusNotifier(),
-                # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                # widget.QuickExit(),
-                widget.CurrentLayoutIcon(scale=0.66),
-                sp(),
-            ],
-            28,
-            background="#00000090"
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-        ),
-        wallpaper="~/wallpapers/001.jpg",
-        wallpaper_mode="stretch",
-    ),
-    Screen(
-        top=bar.Bar(
-            [
-                sp(),
-                widget.CurrentScreen(**current_screen_config),
-                widget.GroupBox(**group_box_config),
                 WindowName(**window_name_config),
                 widget.WindowCount(**window_count_config),
-                #widget.Spacer(),
-                #widget.Prompt(),
-                #widget.Spacer(),
+                # widget.Spacer(),
+                # widget.Prompt(),
+                # widget.Spacer(),
                 # Spotify(play_icon="♫", foreground="ffff00"),
                 # widget.Spacer(length=10),
                 # widget.TaskList(**task_list_config),
@@ -284,26 +342,66 @@ screens = [
                     mouse_callbacks={
                         "Button1": lazy.spawn(f"{terminal} -e htop"),
                         "Button3": lazy.spawn("gnome-system-monitor"),
-                    }),
+                    },
+                ),
                 widget.MemoryGraph(border_width=1, line_width=2),
-                widget.Net(font="monospace", foreground='66aa66', format="U {up} D {down}"),
+                widget.Net(
+                    font="monospace", foreground="66aa66", format="U {up} D {down}"
+                ),
                 widget.Systray(),
                 # widget.PulseVolume(fmt="🔊{}"),
                 widget.Volume(fmt="🔊{}"),
                 sp(),
-                widget.KeyboardLayout(configured_keyboards=['us', 'fr'], foreground='aaaaaa'),
+                widget.KeyboardLayout(
+                    configured_keyboards=["us", "fr"], foreground="aaaaaa"
+                ),
                 sp(),
                 widget.Clock(format="%Y/%m/%d %a %I:%M %p"),
                 widget.CurrentLayoutIcon(scale=0.6),
-                widget.Wallpaper(label="WP", foreground="00aa00", random_selection=True),
+                widget.Wallpaper(
+                    label="WP", foreground="00aa00", random_selection=True
+                ),
                 sp(),
             ],
-            28,
+            32,
             background="#00000090",
+            margin=8,
         ),
         # wallpaper="~/wallpapers/001.jpg",
         # wallpaper_mode="stretch",
-    )
+    ),
+    Screen(
+        # top=bar.Bar(
+        #     [
+        #         sp(),
+        #         widget.CurrentScreen(**current_screen_config),
+        #         widget.GroupBox(**group_box_config),
+        #         # widget.Prompt(),
+        #         widget.WindowName(**window_name_config),
+        #         widget.WindowCount(**window_count_config),
+        #         widget.Chord(
+        #             chords_colors={
+        #                 "launch": ("#ff0000", "#ffffff"),
+        #             },
+        #             name_transform=lambda name: name.upper(),
+        #         ),
+        #         # widget.Spacer(),
+        #         # widget.TaskList(**task_list_config),
+        #         # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
+        #         # widget.StatusNotifier(),
+        #         # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+        #         # widget.QuickExit(),
+        #         widget.CurrentLayoutIcon(scale=0.66),
+        #         sp(),
+        #     ],
+        #     28,
+        #     background="#00000090"
+        #     # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+        #     # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+        # ),
+        # wallpaper="~/wallpapers/001.jpg",
+        # wallpaper_mode="stretch",
+    ),
 ]
 
 
@@ -316,8 +414,15 @@ screens = [
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Drag(
+        [mod],
+        "Button1",
+        lazy.window.set_position_floating(),
+        start=lazy.window.get_position(),
+    ),
+    Drag(
+        [mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()
+    ),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
@@ -325,7 +430,7 @@ dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
 bring_front_click = False
-cursor_warp = False
+cursor_warp = True
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -334,9 +439,12 @@ floating_layout = layout.Floating(
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
         Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(wm_class="FpvlApp"),
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-    ]
+    ],
+    border_focus="#555",
+    border_width=4,
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
