@@ -11,128 +11,127 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
-require('lazy').setup({
+require("lazy").setup({
   {
-    'williamboman/mason.nvim',
+    "williamboman/mason.nvim",
     build = ":MasonUpdate",
   },
   {
-    'williamboman/mason-lspconfig.nvim',
+    "williamboman/mason-lspconfig.nvim",
     dependencies = {
-      'williamboman/mason.nvim',
-      'neovim/nvim-lspconfig',
+      "williamboman/mason.nvim",
+      "neovim/nvim-lspconfig",
     },
   },
   {
-    'jay-babu/mason-null-ls.nvim',
+    "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
       "jose-elias-alvarez/null-ls.nvim",
-    }
+    },
   },
 
   -- VCS
   {
-    'tanvirtin/vgit.nvim',
+    "tanvirtin/vgit.nvim",
     dependencies = {
-      'nvim-lua/plenary.nvim'
-    }
+      "nvim-lua/plenary.nvim",
+    },
   },
 
   -- Explorer
   {
-    'nvim-tree/nvim-tree.lua',
+    "nvim-tree/nvim-tree.lua",
     dependencies = {
-      'nvim-tree/nvim-web-devicons',
+      "nvim-tree/nvim-web-devicons",
     },
-    tag = 'nightly'
+    tag = "nightly",
   },
 
   {
-    'nvim-telescope/telescope.nvim',
-    tag = '0.1.1',
+    "nvim-telescope/telescope.nvim",
+    tag = "0.1.1",
     dependencies = {
-      'nvim-lua/plenary.nvim'
+      "nvim-lua/plenary.nvim",
     },
   },
   {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'make'
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
   },
 
   {
-    'folke/trouble.nvim',
+    "folke/trouble.nvim",
     dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    }
+      "nvim-tree/nvim-web-devicons",
+    },
   },
 
-  'ThePrimeagen/harpoon',
+  "ThePrimeagen/harpoon",
 
   -- View
   {
-    'nvim-lualine/lualine.nvim',
+    "nvim-lualine/lualine.nvim",
   },
-
 
   -- Themes
-  'folke/tokyonight.nvim',
-  'navarasu/onedark.nvim',
-  { 'catppuccin/nvim',          name = "catppuccin" },
-  { 'ellisonleao/gruvbox.nvim', priority = 1000 },
-  'rebelot/kanagawa.nvim',
+  "folke/tokyonight.nvim",
+  "navarasu/onedark.nvim",
+  { "catppuccin/nvim",          name = "catppuccin" },
+  { "ellisonleao/gruvbox.nvim", priority = 1000 },
+  "rebelot/kanagawa.nvim",
 
   -- Languages
-  'neovim/nvim-lspconfig',
+  "neovim/nvim-lspconfig",
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
   },
-  'lukas-reineke/lsp-format.nvim',
-  'nvim-treesitter/nvim-treesitter',
-  'nvim-treesitter/nvim-treesitter-context',
+  "lukas-reineke/lsp-format.nvim",
+  "nvim-treesitter/nvim-treesitter",
+  "nvim-treesitter/nvim-treesitter-context",
 
   {
-    'jose-elias-alvarez/null-ls.nvim',
+    "jose-elias-alvarez/null-ls.nvim",
     dependencies = {
-      'nvim-lua/plenary.nvim',
-    }
+      "nvim-lua/plenary.nvim",
+    },
   },
 
-  'udalov/kotlin-vim',
+  "udalov/kotlin-vim",
 
   -- Completion
-  'hrsh7th/cmp-nvim-lsp',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-path',
-  'hrsh7th/cmp-cmdline',
-  'hrsh7th/nvim-cmp',
-  'hrsh7th/cmp-vsnip',
-  'hrsh7th/vim-vsnip',
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-path",
+  "hrsh7th/cmp-cmdline",
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-vsnip",
+  "hrsh7th/vim-vsnip",
 
   {
-    'saecki/crates.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    "saecki/crates.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
   },
 
   -- Editor
-  'jiangmiao/auto-pairs',
-  'terrortylor/nvim-comment',
-  'tpope/vim-surround',
-  'Yggdroot/indentLine',
-  'alvan/vim-closetag',
+  "jiangmiao/auto-pairs",
+  "terrortylor/nvim-comment",
+  "tpope/vim-surround",
+  "Yggdroot/indentLine",
+  "alvan/vim-closetag",
 
+  "github/copilot.vim",
 })
 
-require('mason').setup()
+require("mason").setup()
 
-require('plugins.vcs')
-require('plugins.view')
-require('plugins.files')
-require('plugins.themes')
-require('plugins.editor')
-require('plugins.lsp')
-require('plugins.completion')
+require("plugins.vcs")
+require("plugins.view")
+require("plugins.files")
+require("plugins.themes")
+require("plugins.editor")
+require("plugins.lsp")
+require("plugins.completion")
