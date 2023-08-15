@@ -40,6 +40,7 @@ from commands import terminal
 import commands as cmd
 
 subprocess.Popen(["bash", os.path.expanduser("~/.config/qtile/startup.sh")])
+subprocess.Popen(["/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"])
 
 
 # def send_current_window(qtile):
@@ -180,7 +181,10 @@ group_matches = {}
 group_spawns = {"chat": "slack"}
 
 groups = [
-    Group(name, spawn=group_spawns.get(name), label=name[0:1]) for name in group_names
+    Group(name, spawn=group_spawns.get(name), label=name[0:1])
+    for name in group_names
+    # Group(name, spawn=group_spawns.get(name), label=name[1:])
+    # for name in group_names
 ]
 
 group_keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"]
@@ -285,7 +289,10 @@ extension_defaults = widget_defaults.copy()
 
 
 group_box_config = dict(
-    highlight_method="line", inactive="ffffff60", font="JetBrains Mono", fontsize=14
+    highlight_method="line",
+    inactive="ffffff60",
+    font="JetBrains Mono Nerd Font",
+    fontsize=14,
 )
 window_name_config = dict(
     foreground="aa88ff",

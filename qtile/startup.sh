@@ -3,6 +3,7 @@
 # killall polybar
 # polybar -r &
 systemctl --user start dunst
+systemctl --user start docker-desktop
 compton
 setxkbmap us,fr
 
