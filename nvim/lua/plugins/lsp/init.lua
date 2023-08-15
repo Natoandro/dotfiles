@@ -42,7 +42,7 @@ local lsp_flags = {
 local util = require("lspconfig").util
 
 require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "rust_analyzer", "pyright" },
+  ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "texlab" },
 })
 require("mason-null-ls").setup({
   ensure_installed = { "mypy, ruff", "black", "stylua", "jq" },
@@ -80,13 +80,15 @@ null_ls.setup({
 
 require("lsp-format").setup({})
 
-require("lspconfig")["pyright"].setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  flags = lsp_flags,
-  filetypes = { "python" },
-})
--- require('lspconfig').pylsp.setup {
+-- require("lspconfig")["pyright"].setup({
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   flags = lsp_flags,
+--   filetypes = { "python" },
+--   root_dir = util.root_pattern("pyproject.toml"),
+-- })
+
+-- require("lspconfig").pylsp.setup({
 --   on_attach = on_attach,
 --   capabilities = capabilities,
 --   flags = lsp_flags,
@@ -95,13 +97,13 @@ require("lspconfig")["pyright"].setup({
 --     pylsp = {
 --       plugins = {
 --         pycodestyle = {
---           ignore = {'W391'},
---           maxLineLength = 100
---         }
---       }
---     }
---   }
--- }
+--           ignore = { "W391" },
+--           maxLineLength = 100,
+--         },
+--       },
+--     },
+--   },
+-- })
 
 -- require('lspconfig')['tsserver'].setup{
 --     on_attach = on_attach,
@@ -137,6 +139,7 @@ require("lspconfig").denols.setup({
     enable = true,
     unstable = true,
   },
+  root_dir = util.root_pattern("deno.json", "src/"),
 })
 
 require("lspconfig").lua_ls.setup({
@@ -190,4 +193,24 @@ require("lspconfig").kotlin_language_server.setup({
   on_attach = on_attach,
   flags = lsp_flags,
   capabilities = capabilities,
+})
+
+require("lspconfig").texlab.setup({
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities,
+  settings = {
+    texlab = {
+      forwardSearch = {
+        executable = "okular",
+        args = { "--unique", "file:%p#src:%l%f" },
+      },
+      build = {
+        executable = "pdflatex",
+        args = { "-interaction=nonstopmode", "-synctex=1", "%f" },
+        onSave = true,
+        -- forwardSearchAfter = true,
+      },
+    },
+  },
 })

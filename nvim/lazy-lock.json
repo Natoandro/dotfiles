@@ -1,4 +1,5 @@
 {
+  "aura-theme": { "branch": "feat/neovim-port", "commit": "7ea467f5c5b554275b0a6983631bc22b0d860e1e" },
   "auto-pairs": { "branch": "master", "commit": "39f06b873a8449af8ff6a3eee716d3da14d63a76" },
   "catppuccin": { "branch": "main", "commit": "57b421ee5f7380f816791fa451e86f213b625ece" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
@@ -23,6 +24,7 @@
   "nvim-cmp": { "branch": "main", "commit": "768548bf4980fd6d635193a9320545bb46fcb6d8" },
   "nvim-comment": { "branch": "main", "commit": "e9ac16ab056695cad6461173693069ec070d2b23" },
   "nvim-lspconfig": { "branch": "master", "commit": "30a232052b3e1c0c51d190d5f5a12ad9b42c5ebc" },
+  "nvim-texlabconfig": { "branch": "master", "commit": "b817297fd07bd6c127df56d01f439f2f838c49ed" },
   "nvim-tree.lua": { "branch": "master", "commit": "59e65d88db177ad1e6a8cffaafd4738420ad20b6" },
   "nvim-treesitter": { "branch": "master", "commit": "d2b78324f2191db72e9bc063ff435278c36bf06b" },
   "nvim-treesitter-context": { "branch": "master", "commit": "e3535ff78a3eff328ad1b32f327fb85e58241d4b" },

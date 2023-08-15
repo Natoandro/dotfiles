@@ -81,6 +81,15 @@ require("lazy").setup({
   { "catppuccin/nvim",          name = "catppuccin" },
   { "ellisonleao/gruvbox.nvim", priority = 1000 },
   "rebelot/kanagawa.nvim",
+  {
+    "baliestri/aura-theme",
+    lazy = false,
+    priority = 1000,
+    config = function(plugin)
+      vim.opt.rtp:append(plugin.dir .. "/packages/neovim")
+      vim.cmd("colorscheme aura-dark")
+    end,
+  },
 
   -- Languages
   "neovim/nvim-lspconfig",
@@ -100,6 +109,16 @@ require("lazy").setup({
   },
 
   "udalov/kotlin-vim",
+
+  -- "lervag/vimtex",
+  {
+    "f3fora/nvim-texlabconfig",
+    config = function()
+      require("texlabconfig").setup()
+    end,
+    ft = { "tex", "bib" },
+    build = "go build",
+  },
 
   -- Completion
   "hrsh7th/cmp-nvim-lsp",

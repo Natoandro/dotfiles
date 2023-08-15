@@ -36,5 +36,9 @@ vim.opt.termguicolors = true
 vim.g.indentLine_char = "▏"
 vim.g.indentLine_setConceal = 0
 
+-- copilot
+-- enable copilot for mdx
+vim.g.copilog_filetypes = { "mdx" }
+
 require("plugins")
 require("keymaps")
