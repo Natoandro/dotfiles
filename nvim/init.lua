@@ -40,5 +40,14 @@ vim.g.indentLine_setConceal = 0
 -- enable copilot for mdx
 vim.g.copilog_filetypes = { "mdx" }
 
-require("plugins")
+vim.g.mapleader = " "
+
+require("plugin_manager")
+
 require("keymaps")
+
+-- select theme
+-- require('onedark').load()
+-- vim.cmd[[colorscheme tokyonight]]
+-- vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme("gruvbox")

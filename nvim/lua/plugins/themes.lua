@@ -1,37 +1,58 @@
-
-require('tokyonight').setup({
-  style = 'moon',
-  -- transparent = true,
-  styles = {
-    -- sidebars = 'transparent',
+return {
+  {
+    "folke/tokyonight.nvim",
+    opts = {
+      style = "moon",
+      -- transparent = true,
+      styles = {
+        -- sidebars = 'transparent',
+      },
+      dim_inactive = true,
+    },
   },
-  dim_inactive = true,
-})
 
-require('onedark').setup({
-  -- style = 'darker',
-  style = 'deep',
-  -- transparent = true,
-  toggle_style_key = '<leader>ts',
-  toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'light'},
-})
--- require('onedark').load()
+  {
+    "navarasu/onedark.nvim",
+    opts = {
+      -- style = 'darker',
+      style = "deep",
+      -- transparent = true,
+      toggle_style_key = "<leader>ts",
+      toggle_style_list = { "dark", "darker", "cool", "deep", "light" },
+    },
+  },
 
--- vim.cmd[[colorscheme tokyonight]]
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    opts = {
+      flavour = "frappe",
+      -- transparent_background = true,
+    },
+  },
 
-require('catppuccin').setup({
-  flavour = "frappe",
-  -- transparent_background = true,
-})
+  {
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000,
+    opts = {
+      -- transparent_mode = true,
+    },
+  },
 
-require('gruvbox').setup({
-  -- transparent_mode = true
-})
+  {
+    "rebelot/kanagawa.nvim",
+    opts = {
+      dimInactive = true,
+    },
+  },
 
-require('kanagawa').setup({
-  dimInactive = true,
-})
-
--- vim.cmd.colorscheme "catppuccin"
-vim.cmd.colorscheme "gruvbox"
-
+  {
+    "baliestri/aura-theme",
+    lazy = false,
+    priority = 1000,
+    config = function(plugin)
+      vim.opt.rtp:append(plugin.dir .. "/packages/neovim")
+      vim.cmd("colorscheme aura-dark")
+    end,
+  },
+}
