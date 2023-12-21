@@ -31,14 +31,34 @@ return {
           },
         },
       },
-      tabline = {
-        lualine_a = {
+      inactive_sections = {
+        lualine_c = {
           {
-            "buffers",
-            mode = 2,
+            "filename",
+            path = 1,
           },
         },
-        lualine_c = { "%=" },
+      },
+      tabline = {
+        -- lualine_a = {
+        -- 	{
+        -- 		"buffers",
+        -- 		mode = 2,
+        -- 	},
+        -- },
+        -- lualine_c = { "%=" },
+        -- lualine_y = {
+        -- 	{
+        -- 		"filename",
+        -- 		path = 1,
+        -- 	},
+        -- },
+        lualine_b = {
+          {
+            "filename",
+            path = 1,
+          },
+        },
         lualine_z = { "tabs" },
       },
     },

@@ -12,7 +12,7 @@ return {
       "neovim/nvim-lspconfig",
     },
     opts = {
-      ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "texlab" },
+      ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "texlab", "tsserver" },
     },
   },
 
@@ -24,7 +24,7 @@ return {
       "jose-elias-alvarez/null-ls.nvim",
     },
     opts = {
-      ensure_installed = { "mypy, ruff", "black", "stylua", "jq" },
+      ensure_installed = { "mypy, ruff", "black", "stylua", "jq", "codelldb" },
       automatic_setup = true,
     },
   },

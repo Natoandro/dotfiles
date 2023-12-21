@@ -1,9 +1,9 @@
 local function map(mode, lhs, rhs, opts)
-  local options = { noremap = true, silent = true }
-  if opts then
-    options = vim.tbl_extend("force", options, opts)
-  end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+	local options = { noremap = true, silent = true }
+	if opts then
+		options = vim.tbl_extend("force", options, opts)
+	end
+	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
 map("n", "<C-h>", "<C-w>h")
@@ -34,6 +34,10 @@ vim.keymap.set("n", "<leader>st", builtin.colorscheme)
 vim.keymap.set("n", "<leader>fq", builtin.quickfix)
 vim.keymap.set("n", "<leader>fj", builtin.jumplist)
 
+vim.keymap.set("n", "<leader>F", function()
+	vim.lsp.buf.format({ async = true })
+end, bufopts)
+
 -- NvimComment
 map("n", "<leader>/", ":CommentToggle<CR>")
 map("v", "<leader>/", ":CommentToggle<CR>")
@@ -61,3 +65,7 @@ vim.keymap.set("n", "gn", harpoon_ui.nav_next)
 
 vim.keymap.set("i", "<M-.>", "<Plug>(copilot-next)")
 vim.keymap.set("i", "<M-,>", "<Plug>(copilot-previous)")
+
+map("n", "<leader>qs", [[<cmd>lua require("persistence").load()<cr>]])
+map("n", "<leader>ql", [[<cmd>lua require("persistence").load({ last = true })()<cr>]])
+map("n", "<leader>qd", [[<cmd>lua require("persistence").stop()<cr>]])

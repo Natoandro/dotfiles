@@ -18,8 +18,8 @@ vim.opt.foldlevel = 10
 
 vim.opt.autoread = true
 vim.api.nvim_create_autocmd(
-  { "BufEnter", "CursorHold", "CursorHoldi", "FocusGained" },
-  { command = "if mode() != 'c' | checktime | endif", pattern = { "*" } }
+	{ "BufEnter", "CursorHold", "CursorHoldi", "FocusGained" },
+	{ command = "if mode() != 'c' | checktime | endif", pattern = { "*" } }
 )
 
 -- vgit
@@ -45,9 +45,4 @@ vim.g.mapleader = " "
 require("plugin_manager")
 
 require("keymaps")
-
--- select theme
--- require('onedark').load()
--- vim.cmd[[colorscheme tokyonight]]
--- vim.cmd.colorscheme "catppuccin"
-vim.cmd.colorscheme("gruvbox")
+require("auto")
