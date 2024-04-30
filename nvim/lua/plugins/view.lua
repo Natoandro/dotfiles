@@ -1,22 +1,5 @@
 return {
   {
-    "nvim-tree/nvim-tree.lua",
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    tag = "nightly",
-    opts = {
-      view = {
-        adaptive_size = true,
-        number = true,
-        relativenumber = true,
-        centralize_selection = true,
-        width = 40,
-      },
-    },
-  },
-
-  {
     "nvim-lualine/lualine.nvim",
     opts = {
       options = {
@@ -53,6 +36,12 @@ return {
         -- 		path = 1,
         -- 	},
         -- },
+        lualine_a = {
+          {
+            "datetime",
+            style = "%m/%d %H:%M",
+          },
+        },
         lualine_b = {
           {
             "filename",

@@ -1,41 +1,41 @@
 local function map(mode, lhs, rhs, opts)
-	local options = { noremap = true, silent = true }
-	if opts then
-		options = vim.tbl_extend("force", options, opts)
-	end
-	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+  local options = { noremap = true, silent = true }
+  if opts then
+    options = vim.tbl_extend("force", options, opts)
+  end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
 map("n", "<C-h>", "<C-w>h")
 map("n", "<C-j>", "<C-w>j")
 map("n", "<C-k>", "<C-w>k")
 map("n", "<C-l>", "<C-w>l")
+map("n", "<C-n>", ":NvimTreeToggle<CR>")
 
 map("n", "<leader>R", ":so ~/.config/nvim/init.lua<CR>")
 map("n", "<leader>s", ":w<CR>")
-
--- NvimTree
-map("n", "<C-n>", ":NvimTreeToggle<CR>")
--- map('n', '<leader>f', ':NvimTreeRefresh<CR>')
-map("n", "<leader>n", ":NvimTreeFindFile<CR>")
 
 -- Telescope
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files)
 vim.keymap.set("n", "<leader>fg", builtin.live_grep)
-vim.keymap.set("n", "<leader>fb", builtin.buffers)
-vim.keymap.set("n", "<leader>fh", builtin.help_tags)
-vim.keymap.set("n", "<leader>ft", builtin.treesitter)
+vim.keymap.set("n", "<leader>tb", builtin.buffers)
+vim.keymap.set("n", "<leader>th", builtin.help_tags)
+vim.keymap.set("n", "<leader>tt", builtin.treesitter)
 vim.keymap.set("n", "<leader>gc", builtin.git_commits)
 vim.keymap.set("n", "<leader>gC", builtin.git_bcommits)
 vim.keymap.set("n", "<leader>gb", builtin.git_branches)
 vim.keymap.set("n", "<leader>gs", builtin.git_status)
-vim.keymap.set("n", "<leader>st", builtin.colorscheme)
-vim.keymap.set("n", "<leader>fq", builtin.quickfix)
-vim.keymap.set("n", "<leader>fj", builtin.jumplist)
+vim.keymap.set("n", "<leader>tc", builtin.colorscheme)
+vim.keymap.set("n", "<leader>tq", builtin.quickfix)
+vim.keymap.set("n", "<leader>tj", builtin.jumplist)
+vim.keymap.set("n", "<leader>fb", ":Telescope file_browser path=%:p:h select_buffer=true hidden=true<CR>")
+vim.keymap.set("n", "<leader>is", function()
+  builtin.symbols({ sources = { "emoji" } })
+end)
 
 vim.keymap.set("n", "<leader>F", function()
-	vim.lsp.buf.format({ async = true })
+  vim.lsp.buf.format({ async = true })
 end, bufopts)
 
 -- NvimComment

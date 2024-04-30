@@ -1,31 +1,39 @@
 return {
-  {
-    "saecki/crates.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {
-      null_ls = {
-        enabled = true,
-        name = "crates.nvim",
-      },
-    },
-  },
+	{
+		"saecki/crates.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			null_ls = {
+				enabled = true,
+				name = "crates.nvim",
+			},
+		},
+	},
 
-  "jiangmiao/auto-pairs",
+	"jiangmiao/auto-pairs",
+	{
+		"windwp/nvim-ts-autotag",
+		config = function()
+			require("nvim-ts-autotag").setup()
+		end,
+	},
 
-  {
-    "terrortylor/nvim-comment",
-    config = function()
-      require("nvim_comment").setup({
-        comment_empty = true,
-      })
-    end,
-  },
+	{
+		"terrortylor/nvim-comment",
+		config = function()
+			require("nvim_comment").setup({
+				comment_empty = true,
+			})
+		end,
+	},
 
-  "tpope/vim-surround",
+	"tpope/vim-surround",
 
-  "Yggdroot/indentLine",
+	"Yggdroot/indentLine",
 
-  "alvan/vim-closetag",
+	"alvan/vim-closetag",
 
-  "github/copilot.vim",
+	"github/copilot.vim",
+
+	"folke/neoconf.nvim",
 }

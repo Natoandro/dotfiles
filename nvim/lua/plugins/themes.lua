@@ -55,4 +55,10 @@ return {
       vim.cmd("colorscheme aura-dark")
     end,
   },
+
+  {
+    "projekt0n/github-nvim-theme",
+    lazy = false,
+    priority = 1000,
+  },
 }
