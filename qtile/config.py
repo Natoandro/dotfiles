@@ -223,7 +223,7 @@ spad_commons = dict(
     opacity=1,
     y=0.2,
     height=0.6,
-    on_focus_lost_hide=True,
+    # on_focus_lost_hide=True,
     warp_pointer=True,
 )
 
@@ -232,7 +232,7 @@ spad = ScratchPad(
     [
         DropDown(
             "term",
-            terminal + " -T 'Scratchpad terminal' -e tmux new-session -A -s 'spad'",
+            terminal + " -T 'Scratchpad terminal' -e zellij -l compact a -c spad",
             **spad_commons,
         ),
         DropDown(
@@ -256,6 +256,25 @@ keys.extend(
 def startup():
     qtile.cmd_simulate_keypress([mod], "F12")
     qtile.cmd_simulate_keypress([mod], "F12")
+
+
+@hook.subscribe.startup
+def dbus_register():
+    id = os.environ.get("DESKTOP_AUTOSTART_ID")
+    if not id:
+        return
+    subprocess.Popen(
+        [
+            "dbus-send",
+            "--session",
+            "--print-reply",
+            "--dest=org.freedesktop.SessionManager",
+            "/org/freedesktop/SessionManager",
+            "org.freedesktop.SessionManager.RegisterClient",
+            "string:qtile",
+            f"string:{id}",
+        ]
+    )
 
 
 layouts = [

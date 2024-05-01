@@ -41,7 +41,7 @@ local on_attach = function(client, bufnr)
   -- 	vim.lsp.buf.format()
   -- end, bufopts)
 
-  local builtin = require("telescope.builtin")
+  local builtin = require "telescope.builtin"
   vim.keymap.set("n", "<leader>fr", builtin.lsp_references, bufopts)
   vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, bufopts)
   vim.keymap.set("n", "<leader>fS", builtin.lsp_workspace_symbols, bufopts)
@@ -57,20 +57,20 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-local lspconfig = require("lspconfig")
+local lspconfig = require "lspconfig"
 local util = lspconfig.util
 
 M.setup = function()
-  require("neoconf").setup({})
+  require("neoconf").setup {}
 
-  lspconfig.pyright.setup({
+  lspconfig.pyright.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     flags = lsp_flags,
     filetypes = { "python" },
     -- root_dir = util.root_pattern("pyproject.toml"),
-    root_dir = util.root_pattern("poetry.lock"),
-  })
+    root_dir = util.root_pattern "poetry.lock",
+  }
 
   -- require("lspconfig").pylsp.setup({
   --   on_attach = on_attach,
@@ -101,7 +101,7 @@ M.setup = function()
   --       ["rust-analyzer"] = {}
   --     }
   -- }
-  lspconfig.rust_analyzer.setup({
+  lspconfig.rust_analyzer.setup {
     on_attach = function(client, bufnr)
       on_attach(client, bufnr)
     end,
@@ -115,9 +115,9 @@ M.setup = function()
         },
       },
     },
-  })
+  }
 
-  lspconfig.denols.setup({
+  lspconfig.denols.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
@@ -126,12 +126,12 @@ M.setup = function()
       unstable = true,
     },
     root_dir = util.root_pattern("deno.json", "deno.jsonc"),
-  })
+  }
 
   local vue_language_server_path = require("mason-registry").get_package("vue-language-server"):get_install_path()
       .. "/node_modules/@vue/language-server"
 
-  lspconfig.tsserver.setup({
+  lspconfig.tsserver.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
@@ -146,9 +146,9 @@ M.setup = function()
         },
       },
     },
-  })
+  }
 
-  lspconfig.volar.setup({
+  lspconfig.volar.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
@@ -157,7 +157,7 @@ M.setup = function()
         hybridMode = false,
       },
     },
-  })
+  }
 
   local prettier = {
     formatCommand = 'prettierd "${INPUT}"',
@@ -165,12 +165,12 @@ M.setup = function()
     env = {
       string.format(
         "PRETTIERD_DEFAULT_CONFIG=%s",
-        vim.fn.expand("~/.config/nvim/utils/linter-config/.prettierrc.json")
+        vim.fn.expand "~/.config/nvim/utils/linter-config/.prettierrc.json"
       ),
     },
   }
 
-  lspconfig.efm.setup({
+  lspconfig.efm.setup {
     init_options = {
       documentFormatting = true,
     },
@@ -180,9 +180,9 @@ M.setup = function()
         typescript = { prettier },
       },
     },
-  })
+  }
 
-  lspconfig.lua_ls.setup({
+  lspconfig.lua_ls.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
@@ -202,40 +202,40 @@ M.setup = function()
         },
       },
     },
-  })
+  }
 
-  lspconfig.clangd.setup({
+  lspconfig.clangd.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
-  })
+  }
 
-  lspconfig.csharp_ls.setup({
+  lspconfig.csharp_ls.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
-  })
+  }
 
-  lspconfig.lemminx.setup({
+  lspconfig.lemminx.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
-  })
+  }
 
-  lspconfig.zls.setup({
+  lspconfig.zls.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
-    root_dir = util.root_pattern("build.zig"),
-  })
+    root_dir = util.root_pattern "build.zig",
+  }
 
-  lspconfig.kotlin_language_server.setup({
+  lspconfig.kotlin_language_server.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
-  })
+  }
 
-  lspconfig.texlab.setup({
+  lspconfig.texlab.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
@@ -253,10 +253,10 @@ M.setup = function()
         },
       },
     },
-  })
+  }
 
   local cmd = { "ngserver", "--stdio", "--tsProbeLocations", "node_modules", "--ngProbeLocations", "node_modules" }
 
-  lspconfig.angularls.setup({})
+  lspconfig.angularls.setup {}
 end
 return M

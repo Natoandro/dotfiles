@@ -1,7 +1,3 @@
----------------------------
--- Default awesome theme --
----------------------------
-
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
@@ -11,24 +7,53 @@ local themes_path = gfs.get_themes_dir()
 
 local theme = {}
 
+local colors = {
+    transparent = "#00000000",
+}
+
+theme.colors = colors
+
 theme.font = "sans 8"
 
-theme.bg_normal = "#222222"
-theme.bg_focus = "#535d6c"
+theme.bg_normal = "#4422647f"
+theme.tasklist_bg_normal = colors.transparent
+-- theme.bg_focus = "#535d6c"
+theme.bg_focus = colors.transparent
 theme.bg_urgent = "#ff0000"
-theme.bg_minimize = "#444444"
-theme.bg_systray = theme.bg_normal
+theme.bg_minimize = "#44444466"
+theme.bg_systray = "#225566"
 
 theme.fg_normal = "#aaaaaa"
-theme.fg_focus = "#ffffff"
+theme.fg_focus = "#00ff66"
 theme.fg_urgent = "#ffffff"
-theme.fg_minimize = "#ffffff"
+theme.fg_minimize = "#888888"
 
-theme.useless_gap = dpi(0)
-theme.border_width = dpi(1)
-theme.border_normal = "#000000"
+theme.useless_gap = dpi(2)
+theme.border_width = dpi(4)
+theme.border_normal = "#0000007f"
 theme.border_focus = "#535d6c"
 theme.border_marked = "#91231c"
+
+theme.hotkeys_bg = "#222222aa"
+theme.hotkeys_fg = "#aaffaa"
+theme.hotkeys_modifiers_fg = "#aaaaff"
+theme.hotkeys_label_fg = "#aaaaff"
+
+theme.prompt_fg = "#cccc00"
+theme.prompt_bg = "#00000000"
+theme.prompt_fg_cursor = "#0000ff"
+theme.prompt_bg_cursor = "#aaaa00"
+theme.prompt_font = "monospace bold 9"
+
+theme.taglist_font = "monospace 9"
+
+theme.notification_font = "monospace 9"
+theme.notification_bg = "#225522"
+theme.notification_margin = 4
+theme.notification_border_color = "#005500"
+theme.notification_font = "monospace 10"
+
+theme.systray_icon_spacing = dpi(8)
 
 -- There are other variable sets
 -- overriding the default one when
@@ -58,7 +83,7 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(taglist_square_
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = themes_path .. "default/submenu.png"
-theme.menu_height = dpi(15)
+theme.menu_height = dpi(24)
 theme.menu_width = dpi(100)
 
 -- You can add as many variables as
@@ -94,7 +119,7 @@ theme.titlebar_maximized_button_normal_active = themes_path .. "default/titlebar
 theme.titlebar_maximized_button_focus_active = themes_path .. "default/titlebar/maximized_focus_active.png"
 
 -- theme.wallpaper = themes_path.."default/background.png"
-theme.wallpaper = "/home/natoandro/wallpapers/001.jpg"
+theme.wallpaper = os.getenv("HOME") .. "/wallpapers/001.jpg"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = themes_path .. "default/layouts/fairhw.png"
