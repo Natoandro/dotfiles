@@ -1,0 +1,20 @@
+live_config_reload = true
+
+[font]
+size = 10.0
+
+[font.normal]
+family = "JetBrains Mono Nerd Font"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Alt"
+
+[window]
+opacity = 0.8
