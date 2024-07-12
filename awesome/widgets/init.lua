@@ -45,26 +45,38 @@ end
 -- Keyboard map indicator and switcher
 _M.keyboardlayout = wibox.widget {
   {
-    widget = awful.widget.keyboardlayout,
-  },
-  widget = wibox.container.margin,
-  left = 10,
-  right = 10,
-  buttons = gears.table.join(awful.button({}, 1, function()
-    _M.keyboardlayout.widget:next_layout()
-  end)),
-}
-
--- Create a textclock widget
-_M.textclock = wibox.widget {
-  {
-    widget = wibox.widget.textclock,
-    format = "%a %b %d %I:%M %p",
-    font = "monospace bold 9",
+    {
+      widget = awful.widget.keyboardlayout,
+    },
+    widget = wibox.container.background,
+    bg = theme.bg_kblayout,
   },
   widget = wibox.container.margin,
   left = 8,
   right = 8,
+  buttons = gears.table.join(awful.button({}, 1, function()
+    _M.keyboardlayout.widget.widget:next_layout()
+  end)),
+  color = theme.bg_kblayout,
+}
+
+-- widgets are: background, keyboardlayout, textbox
+_M.keyboardlayout.widget.widget.widget.font = "monospace bold 9"
+
+-- Create a textclock widget
+_M.textclock = wibox.widget {
+  {
+    {
+      widget = wibox.widget.textclock,
+      format = "%a %b %d %I:%M %p",
+      font = "monospace bold 9",
+    },
+    widget = wibox.container.margin,
+    left = 12,
+    right = 12,
+  },
+  widget = wibox.container.background,
+  bg = theme.bg_clock,
 }
 
 function _M.create_promptbox()
@@ -107,7 +119,10 @@ function _M.create_layoutbox(s)
   }
 end
 
-function _M.create_systray()
+function _M.create_systray(flags)
+  if flags.skip then
+    return nil
+  end
   return wibox.widget {
     {
       widget = wibox.widget.systray,

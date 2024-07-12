@@ -22,8 +22,10 @@ theme.bg_focus = colors.transparent
 theme.bg_urgent = "#ff0000"
 theme.bg_minimize = "#44444466"
 theme.bg_systray = "#225566"
+theme.bg_clock = "#442288"
+theme.bg_kblayout = "#665522"
 
-theme.fg_normal = "#aaaaaa"
+theme.fg_normal = "#cccccc"
 theme.fg_focus = "#00ff66"
 theme.fg_urgent = "#ffffff"
 theme.fg_minimize = "#888888"
