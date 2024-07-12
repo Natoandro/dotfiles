@@ -1,0 +1,40 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `open default settings` command
+// from the command palette or from `Zed` application menu.
+{
+  "theme": "Catppuccin Macchiato - No Italics",
+  "vim_mode": true,
+  "ui_font_size": 14,
+  "ui_font_family": "Noto Sans",
+  "buffer_font_size": 13,
+  "buffer_font_family": "JetBrainsMono NF",
+  "terminal": {
+    "font_size": 13,
+    "font_family": "JetBrainsMono NF",
+    "dock": "right"
+  },
+  "relative_line_numbers": true,
+  "wrap_guides": [80, 120],
+  "soft_wrap": "editor_width",
+  "inlay_hints": {
+    "enabled": true
+  },
+  "indent_guides": {
+    "coloring": "indent_aware",
+    "line_width": 2
+  },
+  "project_panel": {
+    "indent_size": 10,
+    "auto_fold_dirs": true
+  },
+  "languages": {
+    "proto": {
+      "tab_size": 2
+    }
+  }
+}
