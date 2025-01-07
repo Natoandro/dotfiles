@@ -27,10 +27,17 @@ myConfig = def
     , startupHook = myStartupHook
     , terminal = myTerminal
     }
+  `additionalKeys`
+    [ ((0, 0x1008FF11), spawn "amixer -q sset Master 2%-")
+    , ((0, 0x1008FF13), spawn "amixer -q sset Master 2%+")
+    , ((0, 0x1008FF12), spawn "amixer set Master toggle")
+    ]
   `additionalKeysP`
     [ ("M-C-s", unGrab *> spawn "scrot -s")
     , ("M-f", spawn "firefox-esr")
-    , ("M-t", spawn "alacritty")
+    -- , ("M-t", spawn "alacritty")
+    , ("M-S-p", spawn "rofi -show drun")
+    , ("M-S-z", spawn "xscreensaver-command -lock")
     ]
 
 
@@ -74,6 +81,9 @@ myStartupHook = do
              \--SetPartialStrut true --expand true --width 10 \
              \--transparent true --tint 0x5f5f5f --height 18"
   spawnOnce "xsetroot -cursor_name left_ptr"
-  spawnOnce "feh --bg-fill --no-fehbg ~/.wallpapers/haskel-red-noise.png"
+  spawnOnce "feh --bg-fill --no-fehbg -z ~/.wallpapers"
   spawnOnce "nm-tray --sm-disable"
+  spawnOnce "picom"
+  spawnOnce "systemctl --user start docker-desktop"
+  spawnOnce "xscreensaver --no-splash"
 
