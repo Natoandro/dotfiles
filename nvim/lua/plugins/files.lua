@@ -13,6 +13,9 @@ return {
         centralize_selection = true,
         width = 40,
       },
+      update_focused_file = {
+        enable = true,
+      },
     },
   },
 

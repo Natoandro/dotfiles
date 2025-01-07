@@ -16,7 +16,7 @@ map("n", "<leader>R", ":so ~/.config/nvim/init.lua<CR>")
 map("n", "<leader>s", ":w<CR>")
 
 -- Telescope
-local builtin = require("telescope.builtin")
+local builtin = require "telescope.builtin"
 vim.keymap.set("n", "<leader>ff", builtin.find_files)
 vim.keymap.set("n", "<leader>fg", builtin.live_grep)
 vim.keymap.set("n", "<leader>tb", builtin.buffers)
@@ -31,11 +31,11 @@ vim.keymap.set("n", "<leader>tq", builtin.quickfix)
 vim.keymap.set("n", "<leader>tj", builtin.jumplist)
 vim.keymap.set("n", "<leader>fb", ":Telescope file_browser path=%:p:h select_buffer=true hidden=true<CR>")
 vim.keymap.set("n", "<leader>is", function()
-  builtin.symbols({ sources = { "emoji" } })
+  builtin.symbols { sources = { "emoji" } }
 end)
 
 vim.keymap.set("n", "<leader>F", function()
-  vim.lsp.buf.format({ async = true })
+  vim.lsp.buf.format { async = true }
 end, bufopts)
 
 -- NvimComment
@@ -56,8 +56,8 @@ map("n", "<leader>9", ":LualineBuffersJump! 9<CR>")
 map("n", "gh", ":bprev<CR>")
 map("n", "gl", ":bnext<CR>")
 
-local harpoon_ui = require("harpoon.ui")
-local harpoon_mark = require("harpoon.mark")
+local harpoon_ui = require "harpoon.ui"
+local harpoon_mark = require "harpoon.mark"
 vim.keymap.set("n", "<leader>hh", harpoon_ui.toggle_quick_menu)
 vim.keymap.set("n", "<leader>hm", harpoon_mark.add_file)
 vim.keymap.set("n", "gp", harpoon_ui.nav_prev)

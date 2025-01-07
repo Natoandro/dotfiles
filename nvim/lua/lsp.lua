@@ -48,7 +48,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "<leader>fd", builtin.diagnostics)
 
   -- if client.server_capabilities.inlayHintProvider then
-  vim.lsp.inlay_hint.enable(bufnr, true)
+  vim.lsp.inlay_hint.enable(true)
   -- end
 end
 
@@ -89,7 +89,7 @@ M.setup = function()
   --   },
   -- })
 
-  -- require('lspconfig')['tsserver'].setup{
+  -- require('lspconfig')['ts_ls'].setup{
   --     on_attach = on_attach,
   --     flags = lsp_flags,
   -- }
@@ -131,7 +131,7 @@ M.setup = function()
   local vue_language_server_path = require("mason-registry").get_package("vue-language-server"):get_install_path()
       .. "/node_modules/@vue/language-server"
 
-  lspconfig.tsserver.setup {
+  lspconfig.ts_ls.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
@@ -254,6 +254,8 @@ M.setup = function()
       },
     },
   }
+
+  lspconfig.biome.setup {}
 
   local cmd = { "ngserver", "--stdio", "--tsProbeLocations", "node_modules", "--ngProbeLocations", "node_modules" }
 
