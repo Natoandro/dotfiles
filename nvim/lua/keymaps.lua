@@ -69,3 +69,9 @@ vim.keymap.set("i", "<M-,>", "<Plug>(copilot-previous)")
 map("n", "<leader>qs", [[<cmd>lua require("persistence").load()<cr>]])
 map("n", "<leader>ql", [[<cmd>lua require("persistence").load({ last = true })()<cr>]])
 map("n", "<leader>qd", [[<cmd>lua require("persistence").stop()<cr>]])
+
+vim.keymap.set("n", "<leader>tt", function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd "L"
+end)

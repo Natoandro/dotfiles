@@ -18,9 +18,17 @@ vim.opt.foldlevel = 10
 
 vim.opt.autoread = true
 vim.api.nvim_create_autocmd(
-	{ "BufEnter", "CursorHold", "CursorHoldi", "FocusGained" },
-	{ command = "if mode() != 'c' | checktime | endif", pattern = { "*" } }
+  { "BufEnter", "CursorHold", "CursorHoldi", "FocusGained" },
+  { command = "if mode() != 'c' | checktime | endif", pattern = { "*" } }
 )
+
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+  callback = function()
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+  end,
+})
 
 -- vgit
 vim.o.updatetime = 300
@@ -42,7 +50,7 @@ vim.g.copilog_filetypes = { "mdx" }
 
 vim.g.mapleader = " "
 
-require("plugin_manager")
+require "plugin_manager"
 
-require("keymaps")
-require("auto")
+require "keymaps"
+require "auto"
