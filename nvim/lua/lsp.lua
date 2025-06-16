@@ -128,8 +128,8 @@ M.setup = function()
     root_dir = util.root_pattern("deno.json", "deno.jsonc"),
   }
 
-  local vue_language_server_path = require("mason-registry").get_package("vue-language-server"):get_install_path()
-      .. "/node_modules/@vue/language-server"
+  -- local vue_language_server_path = require("mason-registry").get_package("vue-language-server"):get_install_path()
+  --     .. "/node_modules/@vue/language-server"
 
   lspconfig.ts_ls.setup {
     on_attach = on_attach,
@@ -139,11 +139,11 @@ M.setup = function()
     single_file_support = false,
     init_options = {
       plugins = {
-        {
-          name = "@vue/typescript-plugin",
-          location = vue_language_server_path,
-          languages = { "vue" },
-        },
+        -- {
+        --   name = "@vue/typescript-plugin",
+        --   location = vue_language_server_path,
+        --   languages = { "vue" },
+        -- },
       },
     },
   }

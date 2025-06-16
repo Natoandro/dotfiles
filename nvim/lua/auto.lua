@@ -6,3 +6,6 @@ require("onedark").load()
 
 -- -- load session
 -- require("persistence").load()
+--
+
+-- vim.cmd [[TSEnable highlight]]

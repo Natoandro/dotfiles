@@ -4,7 +4,6 @@ return {
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
-    tag = "nightly",
     opts = {
       view = {
         adaptive_size = true,
@@ -15,6 +14,9 @@ return {
       },
       update_focused_file = {
         enable = true,
+      },
+      renderer = {
+        group_empty = true,
       },
     },
   },

@@ -12,7 +12,15 @@ return {
       "neovim/nvim-lspconfig",
     },
     opts = {
-      ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "texlab", "ts_ls", "volar", "biome" },
+      ensure_installed = {
+        "lua_ls",
+        "rust_analyzer",
+        "pyright",
+        "texlab",
+        "ts_ls",
+        "vue_ls",
+        "biome",
+      },
     },
   },
 
