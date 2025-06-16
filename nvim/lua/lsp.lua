@@ -148,6 +148,12 @@ M.setup = function()
     },
   }
 
+  lspconfig.svelte.setup {
+    on_attach = on_attach,
+    flags = lsp_flags,
+    capabilities = capabilities,
+  }
+
   lspconfig.volar.setup {
     on_attach = on_attach,
     flags = lsp_flags,
@@ -170,17 +176,17 @@ M.setup = function()
     },
   }
 
-  lspconfig.efm.setup {
-    init_options = {
-      documentFormatting = true,
-    },
-    settings = {
-      rootMarkers = { ".git/" },
-      languages = {
-        typescript = { prettier },
-      },
-    },
-  }
+  -- lspconfig.efm.setup {
+  -- 	init_options = {
+  -- 		documentFormatting = true,
+  -- 	},
+  -- 	settings = {
+  -- 		rootMarkers = { ".git/" },
+  -- 		languages = {
+  -- 			typescript = { prettier },
+  -- 		},
+  -- 	},
+  -- }
 
   lspconfig.lua_ls.setup {
     on_attach = on_attach,
@@ -260,5 +266,7 @@ M.setup = function()
   local cmd = { "ngserver", "--stdio", "--tsProbeLocations", "node_modules", "--ngProbeLocations", "node_modules" }
 
   lspconfig.angularls.setup {}
+
+  require("lspconfig").gopls.setup {}
 end
 return M
