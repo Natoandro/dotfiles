@@ -17,6 +17,7 @@ mods = "Alt"
 
 [window]
 opacity = 0.8
+blur = true
 
-[general]
-live_config_reload = true
+[mouse]
+hide_when_typing = true

@@ -25,14 +25,11 @@ return {
   },
 
   {
-    "jay-babu/mason-null-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "williamboman/mason.nvim",
-      "jose-elias-alvarez/null-ls.nvim",
-    },
+    "zeioth/none-ls-autoload.nvim",
+    event = { "BufEnter", "BufNewFile" },
+    dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
     opts = {
-      ensure_installed = { "mypy, ruff", "black", "stylua", "jq", "codelldb" },
+      ensure_installed = { "mypy", "black", "stylua", "jq", "codelldb" },
       automatic_setup = true,
     },
   },
