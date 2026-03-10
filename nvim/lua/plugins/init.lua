@@ -33,7 +33,7 @@ return {
 
   "alvan/vim-closetag",
 
-  -- "github/copilot.vim",
+  "github/copilot.vim",
 
   "folke/neoconf.nvim",
 }
