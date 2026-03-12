@@ -258,62 +258,45 @@
   },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "agent": {
-    "tool_permissions": {
-      "default": "allow"
-    },
     "play_sound_when_agent_done": true,
     "notify_when_agent_waiting": "all_screens",
     "favorite_models": [
       {
         "provider": "LocalLiteLLM",
         "model": "cometapi/gpt-5.1-codex",
-        "enable_thinking": false
       },
       {
         "provider": "LocalLiteLLM",
         "model": "cometapi/claude-sonnet-4-5",
-        "enable_thinking": false
       },
       {
         "provider": "LocalLiteLLM",
         "model": "cometapi/qwen3-coder",
-        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
         "model": "gpt-5-mini",
-        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
         "model": "gemini-3-flash-preview",
-        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
         "model": "claude-opus-4.6",
-        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
         "model": "gpt-5.2",
-        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
         "model": "claude-sonnet-4.5",
-        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
         "model": "gemini-3-pro-preview",
-        "enable_thinking": false
       },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-sonnet-4.6",
-        "enable_thinking": false
-      }
     ],
     "profiles": {
       "custom-1": {
@@ -323,10 +306,11 @@
         "context_servers": {},
       },
     },
+    "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.6",
+      "model": "gpt-5-mini",
     },
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -344,7 +328,7 @@
   "title_bar": {
     "show_branch_icon": true,
   },
-  "theme": "One Light",
+  "theme": "Dawnfox - opaque",
   "vim_mode": true,
   "ui_font_size": 14,
   "ui_font_family": "Hack",
