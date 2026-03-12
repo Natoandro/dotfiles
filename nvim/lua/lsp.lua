@@ -10,6 +10,63 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+local function configure_formatting(client, bufnr)
+    -- prefer 'biome' for JS/TS family, otherwise prefer null-ls if present
+    local js_like = {
+        javascript = true,
+        typescript = true,
+        javascriptreact = true,
+        typescriptreact = true,
+        tsx = true,
+        jsx = true,
+    }
+
+    local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+    local clients = vim.lsp.get_clients { bufnr = bufnr }
+    local has_null_ls, has_biome = false, false
+    local biome_client, null_client
+    for _, active in ipairs(clients) do
+        if active.name == "null-ls" then
+            has_null_ls = true
+            null_client = active
+        elseif active.name == "biome" then
+            has_biome = true
+            biome_client = active
+        end
+    end
+
+    local prefer_biome = js_like[ft]
+
+    if prefer_biome and has_biome then
+        -- attach formatting to biome and disable others
+        require("lsp-format").on_attach(biome_client)
+        for _, active in ipairs(clients) do
+            if active.id ~= biome_client.id then
+                active.server_capabilities.documentFormattingProvider = false
+                active.server_capabilities.documentRangeFormattingProvider = false
+            end
+        end
+        return
+    end
+
+    if has_null_ls then
+        -- use null-ls (none-ls) as the formatter for all filetypes unless biome rule applied
+        require("lsp-format").on_attach(null_client)
+        for _, active in ipairs(clients) do
+            if active.id ~= null_client.id then
+                active.server_capabilities.documentFormattingProvider = false
+                active.server_capabilities.documentRangeFormattingProvider = false
+            end
+        end
+        return
+    end
+
+    -- fallback: if no null-ls and no biome preference, attach lsp-format to the current client
+    if client.server_capabilities.documentFormattingProvider then
+        require("lsp-format").on_attach(client)
+    end
+end
+
 -- vim.api.nvim_create_autocmd("LspAttach", {
 -- 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 -- 	callback = function(args)
@@ -21,7 +78,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- })
 
 local on_attach = function(client, bufnr)
-	require("lsp-format").on_attach(client)
+	configure_formatting(client, bufnr)
 	-- require("lsp-inlayhints").on_attach(client, bufnr)
 
 	-- Enable completion triggered by <c-x><c-o>
@@ -36,8 +93,9 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, bufopts)
 	vim.keymap.set("n", "g.", vim.lsp.buf.code_action, bufopts)
-	vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts)
-	vim.keymap.set("n", "cd", vim.lsp.buf.rename, bufopts)
+    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts)
+    -- avoid shadowing the Ex command :cd (change directory)
+    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
 	-- vim.keymap.set("n", "<leader>FF", function()
 	-- 	-- vim.lsp.buf.format({ async = true })
 	-- 	vim.lsp.buf.format()
@@ -49,9 +107,9 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<leader>fS", builtin.lsp_workspace_symbols, bufopts)
 	vim.keymap.set("n", "<leader>fd", builtin.diagnostics)
 
-	-- if client.server_capabilities.inlayHintProvider then
-	vim.lsp.inlay_hint.enable(true)
-	-- end
+	if client.server_capabilities.inlayHintProvider then
+		vim.lsp.inlay_hint(bufnr, true)
+	end
 end
 
 local lsp_flags = {
@@ -59,20 +117,27 @@ local lsp_flags = {
 	debounce_text_changes = 150,
 }
 
-local lspconfig = require "lspconfig"
-local util = lspconfig.util
+local util = require "lspconfig.util"
+
+local function root_pattern(...)
+	local pattern = util.root_pattern(...)
+	return function(bufnr, on_dir)
+		local fname = vim.api.nvim_buf_get_name(bufnr)
+		on_dir(pattern(fname))
+	end
+end
 
 M.setup = function()
 	require("neoconf").setup {}
 
-	lspconfig.pyright.setup {
+	vim.lsp.config("pyright", {
 		on_attach = on_attach,
 		capabilities = capabilities,
 		flags = lsp_flags,
 		filetypes = { "python" },
 		-- root_dir = util.root_pattern("pyproject.toml"),
-		root_dir = util.root_pattern "poetry.lock",
-	}
+		root_dir = root_pattern "poetry.lock",
+	})
 
 	-- require("lspconfig").pylsp.setup({
 	--   on_attach = on_attach,
@@ -103,7 +168,7 @@ M.setup = function()
 	--       ["rust-analyzer"] = {}
 	--     }
 	-- }
-	lspconfig.rust_analyzer.setup {
+	vim.lsp.config("rust_analyzer", {
 		on_attach = function(client, bufnr)
 			on_attach(client, bufnr)
 		end,
@@ -117,9 +182,9 @@ M.setup = function()
 				},
 			},
 		},
-	}
+	})
 
-	lspconfig.denols.setup {
+	vim.lsp.config("denols", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
@@ -127,17 +192,17 @@ M.setup = function()
 			enable = true,
 			unstable = true,
 		},
-		root_dir = util.root_pattern("deno.json", "deno.jsonc"),
-	}
+		root_dir = root_pattern("deno.json", "deno.jsonc"),
+	})
 
 	-- local vue_language_server_path = require("mason-registry").get_package("vue-language-server"):get_install_path()
 	--     .. "/node_modules/@vue/language-server"
 
-	lspconfig.ts_ls.setup {
+	vim.lsp.config("ts_ls", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-		root_dir = util.root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
+		root_dir = root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
 		single_file_support = false,
 		init_options = {
 			plugins = {
@@ -148,15 +213,15 @@ M.setup = function()
 				-- },
 			},
 		},
-	}
+	})
 
-	lspconfig.svelte.setup {
+	vim.lsp.config("svelte", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-	}
+	})
 
-	lspconfig.volar.setup {
+	vim.lsp.config("volar", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
@@ -165,7 +230,7 @@ M.setup = function()
 				hybridMode = false,
 			},
 		},
-	}
+	})
 
 	local prettier = {
 		formatCommand = 'prettierd "${INPUT}"',
@@ -190,7 +255,7 @@ M.setup = function()
 	-- 	},
 	-- }
 
-	lspconfig.lua_ls.setup {
+	vim.lsp.config("lua_ls", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
@@ -210,40 +275,40 @@ M.setup = function()
 				},
 			},
 		},
-	}
+	})
 
-	lspconfig.clangd.setup {
+	vim.lsp.config("clangd", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-	}
+	})
 
-	lspconfig.csharp_ls.setup {
+	vim.lsp.config("csharp_ls", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-	}
+	})
 
-	lspconfig.lemminx.setup {
+	vim.lsp.config("lemminx", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-	}
+	})
 
-	lspconfig.zls.setup {
+	vim.lsp.config("zls", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-		root_dir = util.root_pattern "build.zig",
-	}
+		root_dir = root_pattern "build.zig",
+	})
 
-	lspconfig.kotlin_language_server.setup {
+	vim.lsp.config("kotlin_language_server", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
-	}
+	})
 
-	lspconfig.texlab.setup {
+	vim.lsp.config("texlab", {
 		on_attach = on_attach,
 		flags = lsp_flags,
 		capabilities = capabilities,
@@ -261,14 +326,31 @@ M.setup = function()
 				},
 			},
 		},
-	}
+	})
 
-	lspconfig.biome.setup {}
+	vim.lsp.config("biome", {})
+	vim.lsp.config("angularls", {})
+	vim.lsp.config("gopls", {})
 
-	local cmd = { "ngserver", "--stdio", "--tsProbeLocations", "node_modules", "--ngProbeLocations", "node_modules" }
-
-	lspconfig.angularls.setup {}
-
-	require("lspconfig").gopls.setup {}
+	for _, server in ipairs({
+		"pyright",
+		"rust_analyzer",
+		"denols",
+		"ts_ls",
+		"svelte",
+		"volar",
+		"lua_ls",
+		"clangd",
+		"csharp_ls",
+		"lemminx",
+		"zls",
+		"kotlin_language_server",
+		"texlab",
+		"biome",
+		"angularls",
+		"gopls",
+	}) do
+		vim.lsp.enable(server)
+	end
 end
 return M

@@ -46,7 +46,7 @@ vim.g.indentLine_setConceal = 0
 
 -- copilot
 -- enable copilot for mdx
-vim.g.copilog_filetypes = { "mdx" }
+vim.g.copilot_filetypes = { mdx = true }
 
 vim.g.mapleader = " "
 

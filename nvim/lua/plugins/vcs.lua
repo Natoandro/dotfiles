@@ -1,11 +1,11 @@
 return {
-	{
-		"tanvirtin/vgit.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		config = true, -- TODO is this required
-	},
+    {
+        "lewis6991/gitsigns.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        config = true,
+    },
 
 	{
 		"akinsho/git-conflict.nvim",

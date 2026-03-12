@@ -27,10 +27,20 @@ return {
         },
         rainbow = {
           enable = true,
-          extended_mod = true,
+          extended_mode = true,
         },
         modules = {},
         ignore_install = {},
+        -- add support for gotmpl and gowork if present
+        ensure_installed = (function()
+          local list = { "lua", "rust", "toml", "javascript", "typescript", "tsx", "python", "svelte" }
+          if vim.fn.executable("go") == 1 then
+            table.insert(list, "go")
+            table.insert(list, "gowork")
+          end
+          table.insert(list, "gotmpl")
+          return list
+        end)(),
         additional_vim_regex_highlighting = false,
       }
     end,
@@ -38,17 +48,15 @@ return {
   },
   "nvim-treesitter/nvim-treesitter-context",
 
-  "maxmellon/vim-jsx-pretty",
+  -- rely on treesitter for JSX/TSX highlighting; remove legacy syntax plugin
 
-  {
-    "lukas-reineke/lsp-format.nvim",
-    opts = {},
-  },
+  -- remove lsp-format.nvim; rely on none-ls for formatting routing to avoid duplicate format hooks
 
   {
     "nvimtools/none-ls.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
+      "nvimtools/none-ls-extras.nvim",
     },
     config = function()
       local null_ls = require "null-ls"
@@ -57,10 +65,10 @@ return {
       null_ls.setup {
         sources = {
           null_ls.builtins.formatting.stylua,
-          null_ls.builtins.diagnostics.eslint,
           null_ls.builtins.completion.spell,
           null_ls.builtins.diagnostics.mypy,
-          null_ls.builtins.diagnostics.ruff,
+          require("none-ls.diagnostics.eslint"),
+          require("none-ls.diagnostics.ruff"),
           null_ls.builtins.formatting.black,
         },
         on_attach = function(client, bufnr)
@@ -83,11 +91,6 @@ return {
         end,
       }
     end,
-  },
-
-  {
-    "simrat39/inlay-hints.nvim",
-    config = true,
   },
 
   "udalov/kotlin-vim",

@@ -3,8 +3,6 @@ return {
 
   "hrsh7th/cmp-buffer",
 
-  "hrsh7th/cmp-buffer",
-
   "hrsh7th/cmp-path",
 
   "hrsh7th/cmp-cmdline",
@@ -13,10 +11,12 @@ return {
     "hrsh7th/nvim-cmp",
     config = function()
       local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
       cmp.setup({
         snippet = {
           expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
+            require("luasnip").lsp_expand(args.body)
           end,
         },
         window = {},
@@ -29,7 +29,7 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "vsnip" },
+          { name = "luasnip" },
           { name = "crates" },
         }, {
           { name = "buffer" },
@@ -38,7 +38,9 @@ return {
     end,
   },
 
-  "hrsh7th/cmp-vsnip",
-
-  "hrsh7th/vim-vsnip",
+  "saadparwaiz1/cmp_luasnip",
+  {
+    "L3MON4D3/LuaSnip",
+    build = "make install_jsregexp",
+  },
 }

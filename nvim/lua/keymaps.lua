@@ -6,6 +6,8 @@ local function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+local bufopts = { noremap = true, silent = true }
+
 map("n", "<C-h>", "<C-w>h")
 map("n", "<C-j>", "<C-w>j")
 map("n", "<C-k>", "<C-w>k")
@@ -60,17 +62,14 @@ local harpoon_ui = require "harpoon.ui"
 local harpoon_mark = require "harpoon.mark"
 vim.keymap.set("n", "<leader>hh", harpoon_ui.toggle_quick_menu)
 vim.keymap.set("n", "<leader>hm", harpoon_mark.add_file)
-vim.keymap.set("n", "gp", harpoon_ui.nav_prev)
-vim.keymap.set("n", "gn", harpoon_ui.nav_next)
+-- avoid overriding built-in motions `gp` and `gn`
+vim.keymap.set("n", "<leader>hp", harpoon_ui.nav_prev)
+vim.keymap.set("n", "<leader>hn", harpoon_ui.nav_next)
 
 vim.keymap.set("i", "<M-.>", "<Plug>(copilot-next)")
 vim.keymap.set("i", "<M-,>", "<Plug>(copilot-previous)")
 
-map("n", "<leader>qs", [[<cmd>lua require("persistence").load()<cr>]])
-map("n", "<leader>ql", [[<cmd>lua require("persistence").load({ last = true })()<cr>]])
-map("n", "<leader>qd", [[<cmd>lua require("persistence").stop()<cr>]])
-
-vim.keymap.set("n", "<leader>tt", function()
+vim.keymap.set("n", "<leader>tT", function()
   vim.cmd.vnew()
   vim.cmd.term()
   vim.cmd.wincmd "L"

@@ -12,6 +12,7 @@ return {
             "filename",
             path = 1,
           },
+          -- formatter indicator removed (uses deprecated API in headless checks)
         },
       },
       inactive_sections = {
