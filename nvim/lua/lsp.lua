@@ -91,28 +91,27 @@ local on_attach = function(client, bufnr)
 	-- Enable completion triggered by <c-x><c-o>
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	local bufopts = { noremap = true, silent = true, buffer = bufnr }
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
-	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-	vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, bufopts)
-	vim.keymap.set("n", "g.", vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts)
-    -- avoid shadowing the Ex command :cd (change directory)
+    -- Standard LSP keymaps
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+    -- signature help in insert mode
+    vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 	-- vim.keymap.set("n", "<leader>FF", function()
 	-- 	-- vim.lsp.buf.format({ async = true })
 	-- 	vim.lsp.buf.format()
 	-- end, bufopts)
 
-	local builtin = require "telescope.builtin"
-	vim.keymap.set("n", "<leader>fr", builtin.lsp_references, bufopts)
-	vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, bufopts)
-	vim.keymap.set("n", "<leader>fS", builtin.lsp_workspace_symbols, bufopts)
-	vim.keymap.set("n", "<leader>fd", builtin.diagnostics)
+    local builtin = require "telescope.builtin"
+    vim.keymap.set("n", "<leader>fr", builtin.lsp_references, bufopts)
+    vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, bufopts)
+    vim.keymap.set("n", "<leader>fS", builtin.lsp_workspace_symbols, bufopts)
+    vim.keymap.set("n", "<leader>fd", builtin.diagnostics, bufopts)
 
     if client.server_capabilities.inlayHintProvider then
         -- Neovim API: vim.lsp.inlay_hint.enable(enable, filter?)
