@@ -75,8 +75,26 @@ return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
+    requires = {
+      {
+        "copilotlsp-nvim/copilot-lsp",
+        init = function()
+          -- debounce for next-edit-suggestion (ms)
+          vim.g.copilot_nes_debounce = 500
+        end,
+      },
+    },
     config = function()
-      require("copilot").setup({})
+      require("copilot").setup({
+        nes = {
+          enabled = true,
+          keymap = {
+            accept_and_goto = "<leader>p",
+            accept = false,
+            dismiss = "<Esc>",
+          },
+        },
+      })
     end,
   },
   {

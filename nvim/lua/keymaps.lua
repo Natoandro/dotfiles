@@ -69,6 +69,14 @@ vim.keymap.set("n", "<leader>hn", harpoon_ui.nav_next)
 vim.keymap.set("i", "<M-.>", "<Plug>(copilot-next)")
 vim.keymap.set("i", "<M-,>", "<Plug>(copilot-previous)")
 
+-- NES (next-edit-suggestion) helpers
+vim.keymap.set("n", "<leader>p", function()
+  local ok, s = pcall(require, "copilot.suggestion")
+  if ok and s then
+    s.accept_and_goto()
+  end
+end)
+
 vim.keymap.set("n", "<leader>tT", function()
   vim.cmd.vnew()
   vim.cmd.term()
