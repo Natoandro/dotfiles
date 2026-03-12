@@ -10,61 +10,68 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-local function configure_formatting(client, bufnr)
-    -- prefer 'biome' for JS/TS family, otherwise prefer null-ls if present
-    local js_like = {
-        javascript = true,
-        typescript = true,
-        javascriptreact = true,
-        typescriptreact = true,
-        tsx = true,
-        jsx = true,
-    }
+local format_augroup = vim.api.nvim_create_augroup("LspFormatOnSave", {})
 
-    local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-    local clients = vim.lsp.get_clients { bufnr = bufnr }
-    local has_null_ls, has_biome = false, false
-    local biome_client, null_client
-    for _, active in ipairs(clients) do
-        if active.name == "null-ls" then
-            has_null_ls = true
-            null_client = active
-        elseif active.name == "biome" then
-            has_biome = true
-            biome_client = active
-        end
-    end
+local function select_format_client(bufnr)
+	-- prefer 'biome' for JS/TS family, otherwise prefer null-ls if present
+	local js_like = {
+		javascript = true,
+		typescript = true,
+		javascriptreact = true,
+		typescriptreact = true,
+		tsx = true,
+		jsx = true,
+	}
 
-    local prefer_biome = js_like[ft]
+	local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+	local clients = vim.lsp.get_clients { bufnr = bufnr }
+	local has_null_ls, has_biome = false, false
+	local biome_client, null_client
+	for _, active in ipairs(clients) do
+		if active.name == "null-ls" then
+			has_null_ls = true
+			null_client = active
+		elseif active.name == "biome" then
+			has_biome = true
+			biome_client = active
+		end
+	end
 
-    if prefer_biome and has_biome then
-        -- attach formatting to biome and disable others
-        require("lsp-format").on_attach(biome_client)
-        for _, active in ipairs(clients) do
-            if active.id ~= biome_client.id then
-                active.server_capabilities.documentFormattingProvider = false
-                active.server_capabilities.documentRangeFormattingProvider = false
-            end
-        end
-        return
-    end
+	local prefer_biome = js_like[ft]
+	if prefer_biome and has_biome then
+		return biome_client
+	end
 
-    if has_null_ls then
-        -- use null-ls (none-ls) as the formatter for all filetypes unless biome rule applied
-        require("lsp-format").on_attach(null_client)
-        for _, active in ipairs(clients) do
-            if active.id ~= null_client.id then
-                active.server_capabilities.documentFormattingProvider = false
-                active.server_capabilities.documentRangeFormattingProvider = false
-            end
-        end
-        return
-    end
+	if has_null_ls then
+		return null_client
+	end
 
-    -- fallback: if no null-ls and no biome preference, attach lsp-format to the current client
-    if client.server_capabilities.documentFormattingProvider then
-        require("lsp-format").on_attach(client)
-    end
+	for _, active in ipairs(clients) do
+		if active.supports_method("textDocument/formatting") then
+			return active
+		end
+	end
+end
+
+local function setup_format_on_save(bufnr)
+	vim.api.nvim_clear_autocmds { group = format_augroup, buffer = bufnr }
+	vim.api.nvim_create_autocmd("BufWritePre", {
+		group = format_augroup,
+		buffer = bufnr,
+		callback = function()
+			local format_client = select_format_client(bufnr)
+			if not format_client then
+				return
+			end
+
+			vim.lsp.buf.format({
+				bufnr = bufnr,
+				filter = function(client)
+					return client.id == format_client.id
+				end,
+			})
+		end,
+	})
 end
 
 -- vim.api.nvim_create_autocmd("LspAttach", {
@@ -78,7 +85,7 @@ end
 -- })
 
 local on_attach = function(client, bufnr)
-	configure_formatting(client, bufnr)
+	setup_format_on_save(bufnr)
 	-- require("lsp-inlayhints").on_attach(client, bufnr)
 
 	-- Enable completion triggered by <c-x><c-o>
@@ -107,9 +114,10 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<leader>fS", builtin.lsp_workspace_symbols, bufopts)
 	vim.keymap.set("n", "<leader>fd", builtin.diagnostics)
 
-	if client.server_capabilities.inlayHintProvider then
-		vim.lsp.inlay_hint(bufnr, true)
-	end
+    if client.server_capabilities.inlayHintProvider then
+        -- assume modern Neovim API where `vim.lsp.inlay_hint` is a table
+        vim.lsp.inlay_hint.enable(bufnr, true)
+    end
 end
 
 local lsp_flags = {
@@ -125,6 +133,24 @@ local function root_pattern(...)
 		local fname = vim.api.nvim_buf_get_name(bufnr)
 		on_dir(pattern(fname))
 	end
+end
+
+local function deno_root_dir(fname)
+	local deno_root = util.root_pattern("deno.json", "deno.jsonc")(fname)
+	if not deno_root then
+		return nil
+	end
+
+	local has_package_json = vim.fs.find("package.json", {
+		path = deno_root,
+		upward = true,
+		stop = vim.loop.os_homedir(),
+	})
+	if #has_package_json > 0 then
+		return nil
+	end
+
+	return deno_root
 end
 
 M.setup = function()
@@ -192,7 +218,8 @@ M.setup = function()
 			enable = true,
 			unstable = true,
 		},
-		root_dir = root_pattern("deno.json", "deno.jsonc"),
+		root_dir = deno_root_dir,
+		single_file_support = false,
 	})
 
 	-- local vue_language_server_path = require("mason-registry").get_package("vue-language-server"):get_install_path()

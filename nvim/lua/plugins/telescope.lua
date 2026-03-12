@@ -16,17 +16,22 @@ return {
 					"--type",
 					"f",
 					"--hidden",
-					"--no-ignore",
 					"--follow",
+					"--exclude",
+					".git",
+					"--exclude",
+					"node_modules",
 				} or {
 					"rg",
 					"--files",
 					"--hidden",
 					"--follow",
-					"--no-ignore",
+					"--glob",
+					"!.git/*",
+					"--glob",
+					"!node_modules/*",
 				},
-				-- avoid ignoring files silently; this helps find_files show everything
-				file_ignore_patterns = {},
+				file_ignore_patterns = { "node_modules/", ".git/" },
 				mappings = {
 					i = {
 						["<C-n>"] = actions.move_selection_next,
