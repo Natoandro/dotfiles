@@ -115,8 +115,9 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<leader>fd", builtin.diagnostics)
 
     if client.server_capabilities.inlayHintProvider then
-        -- assume modern Neovim API where `vim.lsp.inlay_hint` is a table
-        vim.lsp.inlay_hint.enable(bufnr, true)
+        -- Neovim API: vim.lsp.inlay_hint.enable(enable, filter?)
+        -- enable hints for this buffer specifically
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     end
 end
 
