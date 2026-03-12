@@ -36,7 +36,10 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    opts = {},
+    config = function()
+      -- migrate to indent-blankline v3 (ibl) API
+      require("ibl").setup({})
+    end,
   },
 
 
