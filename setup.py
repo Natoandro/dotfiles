@@ -47,7 +47,15 @@ def installed_version(binary: str) -> str | None:
     return match.group(0) if match else None
 
 
-def ensure_cargo_bins(cargo_bins: dict[str, str]) -> None:
+def cargo_bin_spec(crate: str, spec: str | dict[str, str]) -> tuple[str, str, str]:
+    if isinstance(spec, str):
+        return crate, spec, crate
+    if isinstance(spec, dict):
+        return crate, spec["version"], spec.get("binary", crate)
+    raise RuntimeError(f"Invalid cargo bin spec for {crate}: {spec!r}")
+
+
+def ensure_cargo_bins(cargo_bins: dict[str, str | dict[str, str]]) -> None:
     if not cargo_bins:
         return
 
@@ -57,14 +65,24 @@ def ensure_cargo_bins(cargo_bins: dict[str, str]) -> None:
     if not command_exists("cargo-binstall"):
         run(["cargo", "install", "cargo-binstall"])
 
-    for binary, required_version in cargo_bins.items():
+    for crate, spec in cargo_bins.items():
+        package, required_version, binary = cargo_bin_spec(crate, spec)
         actual_version = installed_version(binary)
         if actual_version is not None and version_ge(actual_version, required_version):
             print(f"Already installed: {binary} {actual_version}")
             continue
 
-        print(f"Installing: {binary} {required_version}")
-        run(["cargo", "binstall", "-y", "--force", f"{binary}@{required_version}"])
+        print(f"Installing: {package} {required_version}")
+        run(["cargo", "binstall", "-y", "--force", f"{package}@{required_version}"])
+
+
+def ensure_required_bins(required_bins: dict[str, bool]) -> None:
+    for binary, enabled in required_bins.items():
+        if not enabled:
+            continue
+        if not command_exists(binary):
+            raise RuntimeError(f"Missing required binary: {binary}")
+        print(f"Available: {binary}")
 
 
 def ensure_symlink(source: str, destination: str) -> None:
@@ -117,7 +135,9 @@ def main() -> int:
     with MANIFEST.open("rb") as manifest_file:
         manifest = tomllib.load(manifest_file)
 
-    ensure_cargo_bins(manifest.get("bins", {}).get("cargo", {}))
+    bins = manifest.get("bins", {})
+    ensure_cargo_bins(bins.get("cargo", {}))
+    ensure_required_bins(bins.get("required", {}))
 
     ensure_links(manifest.get("links", {}))
 

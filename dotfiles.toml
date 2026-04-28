@@ -1,7 +1,18 @@
 [bins.cargo]
+alacritty = "0.15.1"
+fd-find = { version = "10.3.0", binary = "fd" }
+ripgrep = { version = "14.1.1", binary = "rg" }
+starship = "1.23.0"
+stylua = "2.1.0"
 zellij = "0.44.1"
 
+[bins.required]
+nvim = true
+
 [links.config]
+"alacritty" = true
+"nvim" = true
+"starship.toml" = true
 "zellij/config.kdl" = true
 "zellij/layouts" = true
 
