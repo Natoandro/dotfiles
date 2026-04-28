@@ -1,0 +1,12 @@
+layout {
+    pane split_direction="vertical" {
+        pane name="opencode" command="opencode" size="40%" focus=true
+        pane split_direction="horizontal" size="45%" {
+            pane name="editor" command="nvim" size="70%"
+            pane name="terminal" size="30%"
+        }
+        pane name="changes" command="watch" size="15%" {
+            args "-c" "git status --short"
+        }
+    }
+}

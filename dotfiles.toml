@@ -1,0 +1,9 @@
+[bins.cargo]
+zellij = "0.44.1"
+
+[links.config]
+"zellij/config.kdl" = true
+"zellij/layouts" = true
+
+[links.bin]
+"zellij/bin/agentic-coding-tab" = true

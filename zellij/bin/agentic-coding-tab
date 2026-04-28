@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="${1:-$PWD}"
+project_dir="$(realpath "$project_dir")"
+tab_name="$(basename "$project_dir")"
+layout_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/layouts"
+
+if [[ -n "${ZELLIJ:-}" ]]; then
+    zellij action new-tab \
+        --name "$tab_name" \
+        --cwd "$project_dir" \
+        --layout agentic-coding \
+        --layout-dir "$layout_dir"
+else
+    zellij \
+        --session agentic-coding \
+        --layout agentic-coding \
+        --config-dir "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi
